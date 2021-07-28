@@ -35,6 +35,7 @@
 #include "ns3/ipv6-address.h"
 #include "ns3/ipv6-l3-protocol.h"
 #include "ns3/traced-callback.h"
+#include "ns3/virtual-ipv6-l3-protocol.h"
 
 
 namespace ns3 {
@@ -111,6 +112,15 @@ public:
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason) = 0;
 
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason) = 0;
+
   /**
    * \brief Process options
    * Called by implementing classes to process the options
@@ -135,6 +145,17 @@ public:
                                   bool& stopProcessing,
                                   bool& isDropped,
                                   Ipv6L3Protocol::DropReason& dropReason
+                                  );
+
+  virtual uint8_t ProcessOptions (Ptr<Packet>& packet,
+                                  uint8_t offset,
+                                  uint8_t length,
+                                  Ipv6Header const& ipv6Header,
+                                  Ipv6Address dst,
+                                  uint8_t *nextHeader,
+                                  bool& stopProcessing,
+                                  bool& isDropped,
+                                  VirtualIpv6L3Protocol::DropReason& dropReason
                                   );
 
  /**
@@ -203,6 +224,15 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
 };
 
 /**
@@ -248,6 +278,15 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
 };
 
 /**
@@ -293,6 +332,15 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
 
   /**
    * \brief Pair of a packet and an Ipv6 header.
@@ -486,6 +534,16 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
+
 };
 
 /**
@@ -603,6 +661,16 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
+
 };
 
 /**
@@ -648,6 +716,16 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
+
 };
 
 /**
@@ -693,6 +771,16 @@ public:
                            bool& stopProcessing,
                            bool& isDropped,
                            Ipv6L3Protocol::DropReason& dropReason);
+
+  virtual uint8_t Process (Ptr<Packet>& packet,
+                           uint8_t offset,
+                           Ipv6Header const& ipv6Header,
+                           Ipv6Address dst,
+                           uint8_t *nextHeader,
+                           bool& stopProcessing,
+                           bool& isDropped,
+                           VirtualIpv6L3Protocol::DropReason& dropReason);
+
 };
 
 } /* namespace ns3 */

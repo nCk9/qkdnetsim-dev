@@ -237,6 +237,7 @@ def build(bld):
         'model/virtual-udp-socket-factory-impl.cc',
         'model/virtual-tcp-socket-factory-impl.cc',
         'model/virtual-tcp-socket-base.cc',
+        'model/virtual-ipv6-l3-protocol.cc',
         ]
 
     internet_test = bld.create_ns3_module_test_library('internet')
@@ -427,6 +428,7 @@ def build(bld):
         'model/virtual-udp-socket-factory.h',
         'model/virtual-tcp-socket-factory.h',
         'model/virtual-tcp-socket-base.h',
+        'model/virtual-ipv6-l3-protocol.h',
        ]
 
     if bld.env['NSC_ENABLED']:

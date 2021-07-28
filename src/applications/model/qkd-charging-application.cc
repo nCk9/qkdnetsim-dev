@@ -1060,8 +1060,6 @@ void QKDChargingApplication::StopApplication (void) // Called at time specified 
   m_connected = false; 
   Simulator::Cancel (m_sendEvent);//
 }
-
-
  
 void QKDChargingApplication::SendData (void)
 {
