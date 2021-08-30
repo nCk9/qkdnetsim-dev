@@ -30,7 +30,7 @@
 #include "ns3/ipv6-header.h"
 #include "ns3/ipv6-pmtu-cache.h"
 
-class VirtualVirtualIpv6L3ProtocolTestCase;
+class VirtualIpv6L3ProtocolTestCase;
 
 namespace ns3
 {

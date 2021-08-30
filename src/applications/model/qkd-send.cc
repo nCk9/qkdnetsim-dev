@@ -93,8 +93,16 @@ QKDSend::Setup (Ptr<Socket> socket,
     m_nPacketSize = nPacketsSize;
     m_dataRate = dataRate;
     //  m_device = device;
-    InetSocketAddress temp = InetSocketAddress::ConvertFrom (m_peer);
-    m_dst = temp.GetIpv4();
+    if(InetSocketAddress::IsMatchingType (m_peer))
+    {
+      InetSocketAddress temp = InetSocketAddress::ConvertFrom (m_peer);
+      m_dst = temp.GetIpv4 ();
+    }
+    else if(Inet6SocketAddress::IsMatchingType (m_peer))
+    {
+      Inet6SocketAddress temp = Inet6SocketAddress::ConvertFrom (m_peer);
+      m_dst = temp.GetIpv6 ();
+    }
 
     if (!m_socket)
       m_socket = Socket::CreateSocket (GetNode (), m_tid);

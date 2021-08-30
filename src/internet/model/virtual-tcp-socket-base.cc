@@ -49,7 +49,7 @@
 #include "tcp-l4-protocol.h"
 #include "ipv4-end-point.h"
 #include "ipv6-end-point.h"
-#include "ipv6-l3-protocol.h"
+#include "virtual-ipv6-l3-protocol.h"
 #include "tcp-tx-buffer.h"
 #include "tcp-rx-buffer.h"
 #include "rtt-estimator.h"
@@ -2651,7 +2651,7 @@ int
 VirtualTcpSocketBase::SetupEndpoint6 ()
 {
   NS_LOG_FUNCTION (this);
-  Ptr<Ipv6L3Protocol> ipv6 = m_node->GetObject<Ipv6L3Protocol> ();
+  Ptr<VirtualIpv6L3Protocol> ipv6 = m_node->GetObject<VirtualIpv6L3Protocol> ();
   NS_ASSERT (ipv6 != nullptr);
   if (ipv6->GetRoutingProtocol () == nullptr)
     {

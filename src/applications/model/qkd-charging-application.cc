@@ -1410,6 +1410,16 @@ void QKDChargingApplication::HandleRead (Ptr<Socket> socket)
                        << " total Rx " << m_totalRx << " bytes");
           
         } 
+      else if(Inet6SocketAddress::IsMatchingType (from))
+      {
+        NS_LOG_FUNCTION (this << "At time " << Simulator::Now ().GetSeconds ()
+                       << "s packet sink received "
+                       <<  packet->GetSize () << " bytes from "
+                       << Inet6SocketAddress::ConvertFrom(from).GetIpv6 ()
+                       << " port " << Inet6SocketAddress::ConvertFrom (from).GetPort ()
+                       << " total Rx " << m_totalRx << " bytes");
+        
+      }
 
         ProcessIncomingPacket(packet, socket);
         m_rxTrace (packet, from); 
@@ -1475,6 +1485,16 @@ void QKDChargingApplication::HandleReadAuth (Ptr<Socket> socket)
                          << " port " << InetSocketAddress::ConvertFrom (from).GetPort ()
                          << " total Rx " << m_totalRx << " bytes");
             
+        }
+        else if(Inet6SocketAddress::IsMatchingType (from))
+        {
+          NS_LOG_FUNCTION (this << "At time " << Simulator::Now ().GetSeconds ()
+                         << "s packet sink received "
+                         <<  packet->GetSize () << " bytes from "
+                         << Inet6SocketAddress::ConvertFrom(from).GetIpv6 ()
+                         << " port " << Inet6SocketAddress::ConvertFrom (from).GetPort ()
+                         << " total Rx " << m_totalRx << " bytes");
+          
         } 
     }
 }

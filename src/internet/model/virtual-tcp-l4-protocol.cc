@@ -38,7 +38,7 @@
 #include "ipv4-end-point.h"
 #include "ipv6-end-point.h"
 #include "ipv4-l3-protocol.h"
-#include "ipv6-l3-protocol.h"
+#include "virtual-ipv6-l3-protocol.h"
 #include "ipv6-routing-protocol.h"
 #include "virtual-tcp-socket-factory-impl.h"
 #include "virtual-tcp-socket-base.h"
@@ -459,7 +459,7 @@ VirtualTcpL4Protocol::Receive (Ptr<Packet> packet,
 
   if (endPoints.empty ())
     {
-      if (this->GetObject<Ipv6L3Protocol> () != 0)
+      if (this->GetObject<VirtualIpv6L3Protocol> () != 0)
         {
           NS_LOG_LOGIC ("  No Ipv4 endpoints matched on VirtualTcpL4Protocol, trying Ipv6 " << this);
           Ptr<Ipv6Interface> fakeInterface;
@@ -631,7 +631,7 @@ VirtualTcpL4Protocol::SendPacketV6 (Ptr<Packet> packet, const TcpHeader &outgoin
 
   packet->AddHeader (outgoingHeader);
 
-  Ptr<Ipv6L3Protocol> ipv6 = m_node->GetObject<Ipv6L3Protocol> ();
+  Ptr<VirtualIpv6L3Protocol> ipv6 = m_node->GetObject<VirtualIpv6L3Protocol> ();
   if (ipv6 != 0)
     {
       Ipv6Header header;

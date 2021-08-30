@@ -43,6 +43,7 @@
 #include "virtual-udp-socket-impl.h"
 #include "virtual-udp-l4-protocol.h"
 #include "virtual-ipv4-l3-protocol.h"
+#include "virtual-ipv6-l3-protocol.h"
   
 namespace ns3 {
 
@@ -336,7 +337,7 @@ VirtualUdpSocketImpl::Bind (const Address &address)
 
       if (ipv6.IsMulticast ())
         {
-          Ptr<Ipv6L3Protocol> ipv6l3 = m_node->GetObject <Ipv6L3Protocol> ();
+          Ptr<VirtualIpv6L3Protocol> ipv6l3 = m_node->GetObject <VirtualIpv6L3Protocol> ();
           if (ipv6l3)
             {
               if (m_boundnetdevice == 0)
@@ -985,7 +986,7 @@ VirtualUdpSocketImpl::BindToNetDevice (Ptr<NetDevice> netdevice)
       // and to upgrade it to the actual bound NetDevice.
       if (m_endPoint6->GetLocalAddress ().IsMulticast ())
         {
-          Ptr<Ipv6L3Protocol> ipv6l3 = m_node->GetObject <Ipv6L3Protocol> ();
+          Ptr<VirtualIpv6L3Protocol> ipv6l3 = m_node->GetObject <VirtualIpv6L3Protocol> ();
           if (ipv6l3)
             {
               // Cleanup old one
@@ -1238,7 +1239,7 @@ VirtualUdpSocketImpl::Ipv6JoinGroup (Ipv6Address address, Socket::Ipv6MulticastF
 
   m_ipv6MulticastGroupAddress = address;
 
-  Ptr<Ipv6L3Protocol> ipv6l3 = m_node->GetObject <Ipv6L3Protocol> ();
+  Ptr<VirtualIpv6L3Protocol> ipv6l3 = m_node->GetObject <VirtualIpv6L3Protocol> ();
   if (ipv6l3)
     {
       if (filterMode == INCLUDE && sourceAddresses.empty ())

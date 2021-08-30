@@ -97,7 +97,7 @@ private:
     Ptr<Socket>     m_socket;
     Address         m_peer;
     Address         m_local;
-    Ipv4Address     m_dst;
+    Address         m_dst;
     uint32_t        m_packetSize;
     uint32_t        m_nPackets;
     uint32_t        m_nPacketSize;

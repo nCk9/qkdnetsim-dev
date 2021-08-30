@@ -39,6 +39,7 @@
 #include "ipv4-l3-protocol.h"
 #include "virtual-ipv4-l3-protocol.h"
 #include "ipv6-l3-protocol.h"
+#include "virtual-ipv6-l3-protocol.h"
 #include "virtual-udp-socket-impl.h"  
 #include "virtual-udp-socket-factory-impl.h"
 
@@ -94,7 +95,7 @@ VirtualUdpL4Protocol::NotifyNewAggregate ()
   NS_LOG_FUNCTION (this);
   Ptr<Node> node = this->GetObject<Node> ();
   Ptr<Ipv4> ipv4 = this->GetObject<VirtualIpv4L3Protocol>  ();
-  Ptr<Ipv6> ipv6 = node->GetObject<Ipv6> ();
+  Ptr<Ipv6> ipv6 = node->GetObject<VirtualIpv6L3Protocol> ();
 
   if (m_node == 0)
     {
@@ -349,7 +350,7 @@ VirtualUdpL4Protocol::Receive (Ptr<Packet> packet,
                          header.GetSource (), udpHeader.GetSourcePort (), interface);
   if (endPoints.empty ())
     {
-      if (this->GetObject<Ipv6L3Protocol> () != 0)
+      if (this->GetObject<VirtualIpv6L3Protocol> () != 0)
         {
           NS_LOG_LOGIC ("  No Ipv4 endpoints matched on VirtualUdpL4Protocol, trying Ipv6 "<<this);
           Ptr<Ipv6Interface> fakeInterface;
