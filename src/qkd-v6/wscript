@@ -1,0 +1,42 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+# def options(opt):
+#     pass
+
+# def configure(conf):
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
+
+def build(bld):
+    module = bld.create_ns3_module('qkd-v6', ['core'])
+    module.source = [
+        'model/qkd-v6.cc',
+        'model/qkd-v6-buffer.cc',
+        'model/qkd-v6-key.cc',
+        'model/qkd-v6-header.cc',
+        'model/qkd-v6-net-device.cc',
+        'model/qkd-v6-internal-tag.cc',
+        'helper/qkd-v6-helper.cc',
+        ]
+
+    module_test = bld.create_ns3_module_test_library('qkd-v6')
+    module_test.source = [
+        'test/qkd-v6-test-suite.cc',
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'qkd-v6'
+    headers.source = [
+        'model/qkd-v6.h',
+        'model/qkd-v6-buffer.h',
+        'model/qkd-v6-key.h',
+        'model/qkd-v6-header.h',
+        'model/qkd-v6-net-device.h',
+        'model/qkd-v6-internal-tag.h',
+        'helper/qkd-v6-helper.h',
+        ]
+
+    if bld.env.ENABLE_EXAMPLES:
+        bld.recurse('examples')
+
+    # bld.ns3_python_bindings()
+
