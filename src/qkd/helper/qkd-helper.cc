@@ -218,7 +218,7 @@ QKDHelper::EnableAsciiInternal (
 /**
 *   ADD QKDGraph
 *   @param  Ptr<Node>       sourceNode
-*   @param  Ipv4Address     destinationAddress
+*   @param  Ptr<NetDevice>  device
 */
 void 
 QKDHelper::AddGraph(Ptr<Node> node, Ptr<NetDevice> device)
@@ -229,7 +229,7 @@ QKDHelper::AddGraph(Ptr<Node> node, Ptr<NetDevice> device)
 /**
 *   ADD QKDGraph
 *   @param  Ptr<Node>       sourceNode
-*   @param  Ipv4Address     destinationAddress
+*   @param  Ptr<NetDevice>  device
 *   @param  std::string     graphName    
 */
 void 
@@ -240,7 +240,7 @@ QKDHelper::AddGraph(Ptr<Node> node, Ptr<NetDevice> device, std::string graphName
 /**
 *   ADD QKDGraph
 *   @param  Ptr<Node>       sourceNode
-*   @param  Ipv4Address     sourceAddress
+*   @param  Ptr<NetDevice>  device
 *   @param  std::string     graphName    
 *   @param  std::string     graphType    
 */
@@ -286,7 +286,7 @@ QKDHelper::InstallQKDManager (NodeContainer& n)
     for(uint16_t i=0; i< n.GetN(); i++)
     {   
         if(n.Get(i)->GetObject<QKDManager> () == 0){
-            Ptr<Object> manager = factory.Create <Object> ();
+            Ptr<Object> manager = factory.Create <Object> ();  //one factory can be used to make a single type of object only
             n.Get(i)->AggregateObject (manager);  
             n.Get(i)->GetObject<QKDManager> ()->UseRealStorages(m_useRealStorages);
         } 

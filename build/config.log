@@ -1,4 +1,4 @@
-# project ns (3-dev) configured on Mon Aug 30 23:29:49 2021 by
+# project ns (3-dev) configured on Mon Aug 30 23:41:46 2021 by
 # waf 1.8.19 (abi 98, python 20712f0 on linux2)
 # using ./waf configure
 #
@@ -731,30 +731,30 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_2533a8c8c1dc3152ced41829322bdcdd/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_96610e9cdd808a0a4653fd0f54393b3c/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2533a8c8c1dc3152ced41829322bdcdd/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_2533a8c8c1dc3152ced41829322bdcdd/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_96610e9cdd808a0a4653fd0f54393b3c/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_96610e9cdd808a0a4653fd0f54393b3c/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2533a8c8c1dc3152ced41829322bdcdd/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lcryptopp']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_96610e9cdd808a0a4653fd0f54393b3c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lcryptopp']
 yes
 ------------------------------------------------------
 Checking for compilation flag -Wl,--soname=foo support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wl,--soname=foo', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wl,--soname=foo', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------
 Checking for compilation flag -std=c++11 support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------
 Checking for program 'python'
@@ -857,12 +857,12 @@ int main(int argc, char **argv)
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_73ed2cf1115c81b90dce907b9d8c89a1/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_25ab62d25927ca37b22e6381c11637e8/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fno-strict-aliasing', '-fdebug-prefix-map=/build/python2.7-QDqKfA/python2.7-2.7.18=.', '-fstack-protector-strong', '-fwrapv', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_73ed2cf1115c81b90dce907b9d8c89a1/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_73ed2cf1115c81b90dce907b9d8c89a1/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fno-strict-aliasing', '-fdebug-prefix-map=/build/python2.7-QDqKfA/python2.7-2.7.18=.', '-fstack-protector-strong', '-fwrapv', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_25ab62d25927ca37b22e6381c11637e8/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_25ab62d25927ca37b22e6381c11637e8/testbuild/testprog[0m
 
-['/usr/bin/g++', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_73ed2cf1115c81b90dce907b9d8c89a1/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
+['/usr/bin/g++', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_25ab62d25927ca37b22e6381c11637e8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
 yes
 ------------------------------------------------------------------
 Asking python-config for pyext '--cflags --libs --ldflags' flags
@@ -894,30 +894,30 @@ int main(int argc, char **argv)
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_1759e32fad4c6928c5f622e951390b36/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_d6a4ca1905b50c4d8d81de86ac355e5d/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fPIC', '-fno-strict-aliasing', '-fdebug-prefix-map=/build/python2.7-QDqKfA/python2.7-2.7.18=.', '-fstack-protector-strong', '-fwrapv', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_1759e32fad4c6928c5f622e951390b36/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_1759e32fad4c6928c5f622e951390b36/testbuild/testprog.so[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fPIC', '-fno-strict-aliasing', '-fdebug-prefix-map=/build/python2.7-QDqKfA/python2.7-2.7.18=.', '-fstack-protector-strong', '-fwrapv', '-I/usr/include/python2.7', '-I/usr/include/x86_64-linux-gnu/python2.7', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-D_FORTIFY_SOURCE=2', '-DNDEBUG', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d6a4ca1905b50c4d8d81de86ac355e5d/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_d6a4ca1905b50c4d8d81de86ac355e5d/testbuild/testprog.so[0m
 
-['/usr/bin/g++', '-shared', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_1759e32fad4c6928c5f622e951390b36/testbuild/testprog.so', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
+['/usr/bin/g++', '-shared', '-Xlinker', '-export-dynamic', '-Wl,-O1', '-Wl,-Bsymbolic-functions', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d6a4ca1905b50c4d8d81de86ac355e5d/testbuild/testprog.so', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib/python2.7/config-x86_64-linux-gnu', '-L/usr/lib', '-lpython2.7', '-lpthread', '-ldl', '-lutil', '-lm']
 yes
 ------------------------------------------------------------------
 Checking for compilation flag -fvisibility=hidden support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fvisibility=hidden', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-fvisibility=hidden', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -Wno-array-bounds support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-array-bounds', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-array-bounds', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/dist-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/dist-packages"', '-DHAVE_PYEMBED=1', '-DHAVE_PYEXT=1', '-DHAVE_PYTHON_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for pybindgen location
@@ -1248,9 +1248,9 @@ checking for uint128_t
         }
         
 <==
-[1/2] Compiling [32mbuild/.conf_check_bbf21bbf4b5d800c002105b51b6b95a8/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_d1749a29c9af3b0d4299b7a873d472d7/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_bbf21bbf4b5d800c002105b51b6b95a8/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d1749a29c9af3b0d4299b7a873d472d7/testbuild/test.cpp.1.o']
 err: ../test.cpp: In function ‘int main(int, char**)’:
 ../test.cpp:6:7: error: ‘uint128_t’ was not declared in this scope; did you mean ‘uint32_t’?
     6 |  if ((uint128_t *) 0) return 0;
@@ -1275,8 +1275,8 @@ from /home/nck/Documents/qkdnetsim-dev/src/core: Test does not build: Traceback 
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 139851304860048: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_bbf21bbf4b5d800c002105b51b6b95a8/testbuild/test.cpp.1.o']
+	{task 140165955250128: cxx test.cpp -> test.cpp.1.o}
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d1749a29c9af3b0d4299b7a873d472d7/testbuild/test.cpp.1.o']
 
 not found
 from /home/nck/Documents/qkdnetsim-dev/src/core: The configuration failed
@@ -1294,12 +1294,12 @@ checking for __uint128_t
         }
         
 <==
-[1/2] Compiling [32mbuild/.conf_check_5bdac202d0bff0904825145285b2f914/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_29b10ee0a9f071fe5db5d64212ca080f/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5bdac202d0bff0904825145285b2f914/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_5bdac202d0bff0904825145285b2f914/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_29b10ee0a9f071fe5db5d64212ca080f/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_29b10ee0a9f071fe5db5d64212ca080f/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5bdac202d0bff0904825145285b2f914/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_29b10ee0a9f071fe5db5d64212ca080f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking high precision implementation
@@ -1315,12 +1315,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_c34444fe4847235d09a3541918f5aaad/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header inttypes.h
@@ -1333,12 +1333,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -1351,9 +1351,9 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_97678324c660ea44c1332282d36be610/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_97678324c660ea44c1332282d36be610/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/testbuild/test.cpp.1.o']
 err: ../test.cpp:1:10: fatal error: sys/inttypes.h: No such file or directory
     1 | #include <sys/inttypes.h>
       |          ^~~~~~~~~~~~~~~~
@@ -1366,8 +1366,8 @@ from /home/nck/Documents/qkdnetsim-dev/src/core: Test does not build: Traceback 
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 139851304600912: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_97678324c660ea44c1332282d36be610/testbuild/test.cpp.1.o']
+	{task 140165955299664: cxx test.cpp -> test.cpp.1.o}
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/testbuild/test.cpp.1.o']
 
 not found
 from /home/nck/Documents/qkdnetsim-dev/src/core: The configuration failed
@@ -1382,12 +1382,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_fb502a0a073a1d752cce68200801348e/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_e0be299cf76dd07c28e3ed5a378099b7/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_fb502a0a073a1d752cce68200801348e/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_fb502a0a073a1d752cce68200801348e/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_e0be299cf76dd07c28e3ed5a378099b7/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_e0be299cf76dd07c28e3ed5a378099b7/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_fb502a0a073a1d752cce68200801348e/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_e0be299cf76dd07c28e3ed5a378099b7/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/stat.h
@@ -1400,12 +1400,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_0e7b4f5b721d03e245f6f483480e032d/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_4cdcdc47e3e9b2c65702be054726fd97/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_0e7b4f5b721d03e245f6f483480e032d/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_0e7b4f5b721d03e245f6f483480e032d/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_4cdcdc47e3e9b2c65702be054726fd97/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_4cdcdc47e3e9b2c65702be054726fd97/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_0e7b4f5b721d03e245f6f483480e032d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_4cdcdc47e3e9b2c65702be054726fd97/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header dirent.h
@@ -1418,12 +1418,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_cf2dbe6ded77acefbe7fdee8f7c0c727/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_c98414c753f537fad0ed4e93e1da06d8/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_cf2dbe6ded77acefbe7fdee8f7c0c727/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_cf2dbe6ded77acefbe7fdee8f7c0c727/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c98414c753f537fad0ed4e93e1da06d8/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_c98414c753f537fad0ed4e93e1da06d8/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_cf2dbe6ded77acefbe7fdee8f7c0c727/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c98414c753f537fad0ed4e93e1da06d8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header stdlib.h
@@ -1436,12 +1436,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_ec2e5fe5c1a916e4c3929092ce9bc105/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_9beffb02527cd76936b0d407e49364f8/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ec2e5fe5c1a916e4c3929092ce9bc105/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_ec2e5fe5c1a916e4c3929092ce9bc105/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9beffb02527cd76936b0d407e49364f8/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_9beffb02527cd76936b0d407e49364f8/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ec2e5fe5c1a916e4c3929092ce9bc105/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9beffb02527cd76936b0d407e49364f8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header signal.h
@@ -1454,12 +1454,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_ef05523770d57d2dc3af96e9ddff1d11/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_d3b3aaa03d0994f752aff63b6f763c12/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ef05523770d57d2dc3af96e9ddff1d11/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_ef05523770d57d2dc3af96e9ddff1d11/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d3b3aaa03d0994f752aff63b6f763c12/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_d3b3aaa03d0994f752aff63b6f763c12/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ef05523770d57d2dc3af96e9ddff1d11/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_d3b3aaa03d0994f752aff63b6f763c12/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header pthread.h
@@ -1474,12 +1474,12 @@ int main ()
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_f56ce932a80bb8bd81a4f97333f82fa6/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_b1edceeb5094eef7909bea406799acf6/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f56ce932a80bb8bd81a4f97333f82fa6/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_f56ce932a80bb8bd81a4f97333f82fa6/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_b1edceeb5094eef7909bea406799acf6/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_b1edceeb5094eef7909bea406799acf6/testbuild/testprog[0m
 
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f56ce932a80bb8bd81a4f97333f82fa6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_b1edceeb5094eef7909bea406799acf6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header stdint.h
@@ -1492,12 +1492,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_c34444fe4847235d09a3541918f5aaad/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_3e1accf2b0ab8ea21e0635f5f276f81e/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c34444fe4847235d09a3541918f5aaad/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header inttypes.h
@@ -1510,12 +1510,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_2ff6ec3e56de16e8b866c0ce1d2c3c2d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f6c51ef563c7c9cf65b7d1b8a4662b37/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -1528,9 +1528,9 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_97678324c660ea44c1332282d36be610/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_97678324c660ea44c1332282d36be610/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/testbuild/test.cpp.1.o']
 err: ../test.cpp:1:10: fatal error: sys/inttypes.h: No such file or directory
     1 | #include <sys/inttypes.h>
       |          ^~~~~~~~~~~~~~~~
@@ -1543,8 +1543,8 @@ from /home/nck/Documents/qkdnetsim-dev/src/core: Test does not build: Traceback 
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 139851304602576: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_97678324c660ea44c1332282d36be610/testbuild/test.cpp.1.o']
+	{task 140165955431120: cxx test.cpp -> test.cpp.1.o}
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_104eab4968d84fcb196ac1ff0e0e3209/testbuild/test.cpp.1.o']
 
 not found
 from /home/nck/Documents/qkdnetsim-dev/src/core: The configuration failed
@@ -1558,12 +1558,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_6b07842af762889fed99544543f1505d/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_8d953e44882cde72eb7fcaf9bc1f0ca6/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_6b07842af762889fed99544543f1505d/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_6b07842af762889fed99544543f1505d/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-pthread', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_8d953e44882cde72eb7fcaf9bc1f0ca6/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_8d953e44882cde72eb7fcaf9bc1f0ca6/testbuild/testprog[0m
 
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_6b07842af762889fed99544543f1505d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lrt']
+['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_8d953e44882cde72eb7fcaf9bc1f0ca6/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lrt']
 yes
 ------------------------------------------------------------------
 Checking for header sys/ioctl.h
@@ -1576,12 +1576,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_00b3ef1eb83cbaf7a9731359ea02774f/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_9d4bfaf30e6939dafb3650ecb739fb72/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_00b3ef1eb83cbaf7a9731359ea02774f/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_00b3ef1eb83cbaf7a9731359ea02774f/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9d4bfaf30e6939dafb3650ecb739fb72/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_9d4bfaf30e6939dafb3650ecb739fb72/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_00b3ef1eb83cbaf7a9731359ea02774f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9d4bfaf30e6939dafb3650ecb739fb72/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header net/if.h
@@ -1594,12 +1594,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_5a47c5b75b5c4024464a71edd91fe83c/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_f700220adc87e41de360691fb71265c9/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5a47c5b75b5c4024464a71edd91fe83c/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_5a47c5b75b5c4024464a71edd91fe83c/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f700220adc87e41de360691fb71265c9/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_f700220adc87e41de360691fb71265c9/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5a47c5b75b5c4024464a71edd91fe83c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_f700220adc87e41de360691fb71265c9/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header net/ethernet.h
@@ -1612,12 +1612,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_0b972a6162d284e711d73d309fcc1c7d/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_9eaa41280b4ec1b71fe07b4d8f71b505/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_0b972a6162d284e711d73d309fcc1c7d/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_0b972a6162d284e711d73d309fcc1c7d/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9eaa41280b4ec1b71fe07b4d8f71b505/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_9eaa41280b4ec1b71fe07b4d8f71b505/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_0b972a6162d284e711d73d309fcc1c7d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_9eaa41280b4ec1b71fe07b4d8f71b505/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header linux/if_tun.h
@@ -1630,12 +1630,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_522480c80f1cb7c339a6327dc4de8644/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for header netpacket/packet.h
@@ -1648,12 +1648,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_5444a0f44d6fe8ec15c70b77080f1382/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_ecb5b1611bf9b9571cb6e1b7cd9b7ba1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5444a0f44d6fe8ec15c70b77080f1382/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_5444a0f44d6fe8ec15c70b77080f1382/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ecb5b1611bf9b9571cb6e1b7cd9b7ba1/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_ecb5b1611bf9b9571cb6e1b7cd9b7ba1/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_5444a0f44d6fe8ec15c70b77080f1382/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_ecb5b1611bf9b9571cb6e1b7cd9b7ba1/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for NSC location
@@ -1675,12 +1675,12 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] Compiling [32mbuild/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/test.cpp[0m
+[1/2] Compiling [32mbuild/.conf_check_522480c80f1cb7c339a6327dc4de8644/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/testprog[0m
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/test.cpp.1.o']
+[2/2] Linking [33mbuild/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/testprog[0m
 
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_a9482ed301c2c132e0185bc2c5e7329c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_522480c80f1cb7c339a6327dc4de8644/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
 yes
 ------------------------------------------------------------------
 Checking for program 'sudo'
@@ -1712,36 +1712,36 @@ Checking for compilation flag -fstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -fstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_aa9237f4523b485627525b550aaaaeeb/test.c[0m
+[1/1] Compiling [32mbuild/.conf_check_28042b4cc463547d1a7fdd565ee55b01/test.c[0m
 
-['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.c', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_aa9237f4523b485627525b550aaaaeeb/testbuild/test.c.1.o']
+['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.c', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_28042b4cc463547d1a7fdd565ee55b01/testbuild/test.c.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_32d2d5006b6c6bd393c687a2f371965f/test.cpp[0m
+[1/1] Compiling [32mbuild/.conf_check_c6af6fa9f021bbebd7d60239427885e1/test.cpp[0m
 
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_32d2d5006b6c6bd393c687a2f371965f/testbuild/test.cpp.1.o']
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-std=c++11', '-Wno-parentheses', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.cpp', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_c6af6fa9f021bbebd7d60239427885e1/testbuild/test.cpp.1.o']
 ok
 ------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing support
 ==>
 int main() { return 0; }
 <==
-[1/1] Compiling [32mbuild/.conf_check_aa9237f4523b485627525b550aaaaeeb/test.c[0m
+[1/1] Compiling [32mbuild/.conf_check_28042b4cc463547d1a7fdd565ee55b01/test.c[0m
 
-['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.c', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_aa9237f4523b485627525b550aaaaeeb/testbuild/test.c.1.o']
+['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_BUILD_PROFILE_DEBUG', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_NET_ETHERNET_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_=1', '../test.c', '-c', '-o', '/home/nck/Documents/qkdnetsim-dev/build/.conf_check_28042b4cc463547d1a7fdd565ee55b01/testbuild/test.c.1.o']
 ok
 ------------------------------------------------------------------
 Checking for program 'doxygen'
