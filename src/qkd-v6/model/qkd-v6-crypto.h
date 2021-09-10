@@ -43,9 +43,9 @@
 #include "ns3/deprecated.h"
 #include "ns3/traced-value.h"
 #include "ns3/trace-source-accessor.h"
-#include "ns3/qkd-buffer.h"
-#include "ns3/qkd-header.h"
-#include "ns3/qkd-key.h"
+#include "ns3/qkd-v6-buffer.h"
+#include "ns3/qkd-v6-header.h"
+#include "ns3/qkd-v6-key.h"
 #include "ns3/net-device.h"
 
 #include <crypto++/aes.h>
@@ -64,24 +64,24 @@
 #include <crypto++/md5.h> 
 
 //ENCRYPTION
-#define QKDCRYPTO_OTP 1
-#define QKDCRYPTO_AES 2
+#define QKDv6CRYPTO_OTP 1
+#define QKDv6CRYPTO_AES 2
 //AUTHENTICATION
-#define QKDCRYPTO_AUTH_VMAC     3
-#define QKDCRYPTO_AUTH_MD5      4
-#define QKDCRYPTO_AUTH_SHA1     5
+#define QKDv6CRYPTO_AUTH_VMAC     3
+#define QKDv6CRYPTO_AUTH_MD5      4
+#define QKDv6CRYPTO_AUTH_SHA1     5
 
 namespace ns3 {
 
 /**
  * \ingroup qkd
- * \class QKDCrypto
+ * \class QKDv6Crypto
  * \brief QKD crypto is a class used to perform encryption, decryption, authentication, 
  *  atuhentication-check operations and reassembly of previously fragmented packets.
  *
  *  QKD crypto uses cryptographic algorithms and schemes from
  *  Crypto++ free and open source C++ class cryptographic library. Currently, 
- *  QKDCrypto supports following crypto-graphic algorithms and schemes:
+ *  QKDv6Crypto supports following crypto-graphic algorithms and schemes:
  * • One-Time Pad (OTP) cipher,
  * • Advanced Encryption Standard (AES) block cipher,
  * • VMAC message authentication code (MAC) algorithm,
@@ -99,12 +99,12 @@ namespace ns3 {
  *  Also, QKD crypto implements functions for serialization and deserialization of 
  *  the packet into a byte array which is used as the input in cryptographic algorithms and schemes.
  *
- *  The main idea behind QKDCrypto is to convert packet payload and its header to string and perform cryptographic operations over that string. Since some headers have variable length, 
+ *  The main idea behind QKDv6Crypto is to convert packet payload and its header to string and perform cryptographic operations over that string. Since some headers have variable length, 
  *  like TCP or OLSR, then and there is no field indicating the size of these headers (there is only field indicating whole packet size in IPv4 header) it is difficult to distinguish between
- *  packet payload and end of packet's header. Therefore, we use a small trick to add a QKDDelimiterHeader to help us in this process. This header sits between the packets and it contains only
- *  one field (m_delimiter) which is actually the size of next header. For example, in case of TCP, QKDDelimiterHeader sits between IPv4 and TCP indicating the size of TCP header. 
- *  The order of packets in this case is IPv4, QKDDelimiterHeader, TCP, payload... In case of OLSR it sits between OlsrPacketHeader and OLSRMessageHEader indicating the 
- *  size of OLSRMessageHeader which can vary. The order of packets in this case is IPv4, UPD, OLSRPacketHeader, QKDDelimiterHeader, OLSRMessageHeader, OLSRPacketHeader, QKDDelimiterHeader, 
+ *  packet payload and end of packet's header. Therefore, we use a small trick to add a QKDv6DelimiterHeader to help us in this process. This header sits between the packets and it contains only
+ *  one field (m_delimiter) which is actually the size of next header. For example, in case of TCP, QKDv6DelimiterHeader sits between IPv4 and TCP indicating the size of TCP header. 
+ *  The order of packets in this case is IPv4, QKDv6DelimiterHeader, TCP, payload... In case of OLSR it sits between OlsrPacketHeader and OLSRMessageHEader indicating the 
+ *  size of OLSRMessageHeader which can vary. The order of packets in this case is IPv4, UPD, OLSRPacketHeader, QKDv6DelimiterHeader, OLSRMessageHeader, OLSRPacketHeader, QKDv6DelimiterHeader, 
  *  OLSRMessageHeader and etc.
  *
  *  Post taken from ns-3-users google group by Tommaso Pecorella:
@@ -120,19 +120,19 @@ namespace ns3 {
  *  Problem: what about the Deserialize ?
  *  Well, in that case too you should know the amount of bytes to deserialize. If you think it's less or more, an error will be thrown."
  */
-class QKDCrypto : public Object
+class QKDv6Crypto : public Object
 {
 public:
      
     /**
     * \brief Constructor
     */
-    QKDCrypto ();
+    QKDv6Crypto ();
 
     /**
     * \brief Destructor
     */
-    virtual ~QKDCrypto ();    
+    virtual ~QKDv6Crypto ();    
     /**
     * \brief Get the TypeId
     *
@@ -143,38 +143,38 @@ public:
     /**
     *   This functions is an entry point toward deencryption/authentication-check of the packet
     *   Packet is deserialized from string in case when packet was previously encrypted or authentication, 
-    *   otherwise, the packet is kept in "Packet" form and only QKDCommandHeader and QKDHeader are removed
+    *   otherwise, the packet is kept in "Packet" form and only QKDCommandHeader and QKDv6Header are removed
     *   @param  Ptr<Packet>
-    *   @param  Ptr<QKDBuffer>
+    *   @param  Ptr<QKDv6Buffer>
     *   @param  uint32_t    channelID
     *   @return std::vector<Ptr<Packet> >
     */ 
     std::vector<Ptr<Packet> > ProcessIncomingPacket (
         Ptr<Packet>     p, 
-        Ptr<QKDBuffer>  QKDBuffer,
+        Ptr<QKDv6Buffer>  QKDv6Buffer,
         uint32_t        channelID
     );
 
     /**
     *   This functions is used for real decryption process
     *   @param  Ptr<Packet>
-    *   @param  Ptr<QKDBuffer>
+    *   @param  Ptr<QKDv6Buffer>
     *   @return <Ptr<Packet>
     */ 
-    Ptr<Packet> Decrypt (Ptr<Packet> p, Ptr<QKDBuffer> QKDBuffer);
+    Ptr<Packet> Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6Buffer);
      
     /**
     *   This functions is an entry point toward encryption/authentication of the packet
     *   Packet is serialized to string in case when encryption or authentication is required, 
-    *   otherwise, the packet is kept in "Packet" form and only QKDCommandHeader and QKDHeader is added
+    *   otherwise, the packet is kept in "Packet" form and only QKDCommandHeader and QKDv6Header is added
     *   @param  Ptr<Packet>
-    *   @param  Ptr<QKDBuffer> 
+    *   @param  Ptr<QKDv6Buffer> 
     *   @param  uint32_t
     *   @return std::vector<Ptr<Packet> >
     */
     std::vector<Ptr<Packet> > ProcessOutgoingPacket (
         Ptr<Packet>     p, 
-        Ptr<QKDBuffer>  QKDBuffer,
+        Ptr<QKDv6Buffer>  QKDv6Buffer,
         uint32_t        channelID
     ); 
 
@@ -182,14 +182,14 @@ public:
     *   Check whether there is enough resources (key material) to process (encrypt or decrypt) the packet
     *   @param  Ptr<Packet>
     *   @param  uint32_t
-    *   @param  Ptr<QKDBuffer> 
+    *   @param  Ptr<QKDv6Buffer> 
     *   @return bool
     */
     bool 
     CheckForResourcesToProcessThePacket(
         Ptr<Packet>             p, 
         uint32_t                TOSBand,
-        Ptr<QKDBuffer>          QKDbuffer
+        Ptr<QKDv6Buffer>          QKDv6buffer
     );
 
 private:
@@ -197,20 +197,20 @@ private:
     byte m_iv   [ CryptoPP::AES::BLOCKSIZE ];
    
     /**
-    *   Help function used to covert std::string to QKDHeader
+    *   Help function used to covert std::string to QKDv6Header
     *   Function is used in decryption (deserialize process)
     *   @param  std::string input
-    *   @return QKDHeader
+    *   @return QKDv6Header
     */
-    QKDHeader StringToQKDHeader(std::string& input);
+    QKDv6Header StringToQKDv6Header(std::string& input);
 
     /**
-    *   Help function used to covert std::string to QKDDelimiterHeader
+    *   Help function used to covert std::string to QKDv6DelimiterHeader
     *   Function is used in decryption (deserialize process)
     *   @param  std::string input
-    *   @return QKDDelimiterHeader
+    *   @return QKDv6DelimiterHeader
     */
-    QKDDelimiterHeader StringToQKDDelimiterHeader(std::string& input);
+    QKDv6DelimiterHeader StringToQKDv6DelimiterHeader(std::string& input);
 
     /**
     *   Help function used to serialize packet to std::string which is later used for encryption   
@@ -234,67 +234,67 @@ private:
     std::string VectorToString(std::vector<uint8_t> inputVector);
 
     /**
-    *   Help function used to covert QKDHeader to vector<uint8_t> which is suitable for encryption
-    *   @param QKDHeader qkdheader
+    *   Help function used to covert QKDv6Header to vector<uint8_t> which is suitable for encryption
+    *   @param QKDv6Header qkdv6header
     *   @return  std::vector<uint8_t>
     */
-    std::vector<uint8_t> QKDHeaderToVector(QKDHeader& qkdHeader);
+    std::vector<uint8_t> QKDv6HeaderToVector(QKDv6Header& qkdv6Header);
 
     /**
-    *   Help function used to covert QKDDelimiterHeader to vector<uint8_t> which is suitable for encryption
-    *   @param QKDDelimiterHeader qkdheader
+    *   Help function used to covert QKDv6DelimiterHeader to vector<uint8_t> which is suitable for encryption
+    *   @param QKDv6DelimiterHeader qkdv6header
     *   @return  std::vector<uint8_t>
     */
-    std::vector<uint8_t> QKDDelimiterHeaderToVector(QKDDelimiterHeader& qkdHeader);
+    std::vector<uint8_t> QKDv6DelimiterHeaderToVector(QKDv6DelimiterHeader& qkdv6Header);
 
     /**
-    *   Help function used to create QKDCommandHeader by analyzing tags of the packet
+    *   Help function used to create QKDv6CommandHeader by analyzing tags of the packet
     *   @param  Ptr<Packet> p
     *   @return QKDCommandHeader
     */
-    QKDCommandHeader CreateQKDCommandHeader(Ptr<Packet> p);
+    QKDv6CommandHeader CreateQKDv6CommandHeader(Ptr<Packet> p);
 
     /**
     *   One-time cipher
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
-    std::string OTP (const std::string& data, Ptr<QKDKey> key);
+    std::string OTP (const std::string& data, Ptr<QKDv6Key> key);
         
     /**
     *   AES encryption
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
-    std::string AESEncrypt (const std::string& data, Ptr<QKDKey> key);
+    std::string AESEncrypt (const std::string& data, Ptr<QKDv6Key> key);
 
     /**
     *   AES decryption
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
-    std::string AESDecrypt (const std::string& data, Ptr<QKDKey> key);
+    std::string AESDecrypt (const std::string& data, Ptr<QKDv6Key> key);
 
     /**
     *   Help parent function used for calling child authentication functions
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @param  uint8_t authentic
     *   @return std::string
     */
-    std::string Authenticate(std::string&, Ptr<QKDKey> key, uint8_t authenticationType);
+    std::string Authenticate(std::string&, Ptr<QKDv6Key> key, uint8_t authenticationType);
 
     /**
     *   Help parent function used for calling child authentication functions for authentication check
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @param  uint8_t authentic
     *   @return std::string
     */
-    Ptr<Packet> CheckAuthentication(Ptr<Packet> p, Ptr<QKDKey> key, uint8_t authenticationType);
+    Ptr<Packet> CheckAuthentication(Ptr<Packet> p, Ptr<QKDv6Key> key, uint8_t authenticationType);
 
     /**
     *   Help function used to encode string to HEX string
@@ -327,15 +327,15 @@ private:
     /**
     *   Authentication function in Wegman-Carter fashion
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
-    std::string VMAC (std::string& inputString, Ptr<QKDKey> key);
+    std::string VMAC (std::string& inputString, Ptr<QKDv6Key> key);
 
     /**
     *   MD5 Authentication function
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
     std::string MD5 (std::string& inputString);
@@ -343,7 +343,7 @@ private:
     /**
     *   SHA1 Authentication function
     *   @param  std::string data
-    *   @param  Ptr<QKDKey> key
+    *   @param  Ptr<QKDv6Key> key
     *   @return std::string
     */
     std::string SHA1 (std::string& inputString);
@@ -367,12 +367,12 @@ private:
     *   Function needs to store in cache memory fragments until it receives
     *   whole packet. After receiving of whole packet, decryption can be performed
     *   @param Ptr<Packet>
-    *   @param Ptr<QKDBuffer>
+    *   @param Ptr<QKDv6Buffer>
     *   @return std::vector<Ptr<Packet> >
     */
     std::vector<Ptr<Packet> > CheckForFragmentation (
         Ptr<Packet>         p, 
-        Ptr<QKDBuffer>      QKDBuffer
+        Ptr<QKDv6Buffer>      QKDv6Buffer
     );
 
     uint32_t    m_authenticationTagLengthInBits; //!< length of the authentication tag in bits (32 by default)
@@ -385,8 +385,8 @@ private:
  
 	std::map<uint32_t, std::string> m_cacheFlowValues; //!< map used to hold info about fragmented packets
 
-    uint32_t m_qkdHeaderSize;  //!< qkd header size
-    uint32_t m_qkdDHeaderSize; //!< qkd delimiter header size
+    uint32_t m_qkdv6HeaderSize;  //!< qkd header size
+    uint32_t m_qkdv6DHeaderSize; //!< qkd delimiter header size
 
     bool m_compressionEnabled; //!< encryption (ZIP or similar) enabled?
     bool m_encryptionEnabled;  //!< real encryption used?
@@ -397,14 +397,32 @@ private:
     ///////////////////////////////
 
     //IPv4
-    uint32_t m_ipv4HeaderSize;      //!< we store details about the ipv4 header size which is later used in decryption
-
+    // uint32_t m_ipv4HeaderSize;      //!< we store details about the ipv4 header size which is later used in decryption
+    //IPv6
+    uint32_t m_ipv6HeaderSize;      //!< we store details about the ipv4 header size which is later used in decryption 
     //ICMPv4
-    uint32_t m_icmpv4HeaderSize;
-    uint32_t m_icmpv4EchoHeaderSize; 
-    uint32_t m_icmpv4TimeExceededHeaderSize;
-    uint32_t m_icmpv4DestinationUnreachableHeaderSize;
- 
+    // uint32_t m_icmpv4HeaderSize;
+    // uint32_t m_icmpv4EchoHeaderSize; 
+    // uint32_t m_icmpv4TimeExceededHeaderSize;
+    // uint32_t m_icmpv4DestinationUnreachableHeaderSize;
+    //ICMPv6
+    uint32_t m_icmpv6HeaderSize;
+    uint32_t m_icmpv6OptionHeaderSize;
+    uint32_t m_icmpv6NSHeaderSize;  //Neighbor solicitation
+    uint32_t m_icmpv6NAHeaderSize;  //Neighbor Advertisement
+    uint32_t m_icmpv6RSHeaderSize;  //Router Solicitation
+    uint32_t m_icmpv6RAHeaderSize;  //Router Advertisement
+    uint32_t m_icmpv6RedirectionHeaderSize;
+    uint32_t m_icmpv6EchoHeaderSize;
+    uint32_t m_icmpv6DestinationUnreachableHeaderSize;
+    uint32_t m_icmpv6TooBigHeaderSize;
+    uint32_t m_icmpv6TimeExceededHeaderSize;
+    uint32_t m_icmpv6ParameterErrorHeaderSize;
+    uint32_t m_icmpv6OptionMtuHeaderSize;
+    uint32_t m_icmpv6OptionPrefixInformationHeaderSize;
+    uint32_t m_icmpv6OptionLinkLayerAddressHeaderSize;
+    uint32_t m_icmpv6OptionRedirectHeaderSize;
+    
     //UDP
     uint32_t m_udpHeaderSize;
 
@@ -434,4 +452,4 @@ private:
 }; 
 } // namespace ns3
 
-#endif /* QKDCrypto_QKD_H */
+#endif /* QKDv6Crypto_QKD_H */

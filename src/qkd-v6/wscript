@@ -15,6 +15,13 @@ def build(bld):
         'model/qkd-v6-header.cc',
         'model/qkd-v6-net-device.cc',
         'model/qkd-v6-internal-tag.cc',
+        'model/qkd-v6-crypto.cc',
+        'model/qkd-v6-packet-filter.cc',
+        'model/qkd-v6-queue-disc-item.cc',
+        'model/qkd-v6-manager.cc',
+        'model/qkd-v6-graph.cc',
+        'model/qkd-v6-total-graph.cc',
+        'model/qkd-v6-graph-manager.cc',
         'helper/qkd-v6-helper.cc',
         ]
 
@@ -32,6 +39,13 @@ def build(bld):
         'model/qkd-v6-header.h',
         'model/qkd-v6-net-device.h',
         'model/qkd-v6-internal-tag.h',
+        'model/qkd-v6-crypto.h',
+        'model/qkd-v6-packet-filter.h',
+        'model/qkd-v6-queue-disc-item.h',
+        'model/qkd-v6-manager.h',
+        'model/qkd-v6-graph.h',
+        'model/qkd-v6-total-graph.h',
+        'model/qkd-v6-graph-manager.h',
         'helper/qkd-v6-helper.h',
         ]
 

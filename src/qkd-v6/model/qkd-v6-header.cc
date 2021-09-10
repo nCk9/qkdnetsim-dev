@@ -134,42 +134,42 @@ QKDv6CommandHeader::GetProtocol (void) const{
 
 
 
-NS_OBJECT_ENSURE_REGISTERED (QKDDelimiterHeader);
+NS_OBJECT_ENSURE_REGISTERED (QKDv6DelimiterHeader);
  
-QKDDelimiterHeader::QKDDelimiterHeader (){ 
+QKDv6DelimiterHeader::QKDv6DelimiterHeader (){ 
     m_delimiter = 0;  
 }
 
 TypeId
-QKDDelimiterHeader::GetTypeId ()
+QKDv6DelimiterHeader::GetTypeId ()
 {
-  static TypeId tid = TypeId ("ns3::QKDDelimiterHeader")
+  static TypeId tid = TypeId ("ns3::QKDv6DelimiterHeader")
     .SetParent<Header> ()
-    .AddConstructor<QKDDelimiterHeader> ()
+    .AddConstructor<QKDv6DelimiterHeader> ()
   ;
   return tid;
 }
 
 TypeId
-QKDDelimiterHeader::GetInstanceTypeId () const
+QKDv6DelimiterHeader::GetInstanceTypeId () const
 {
   return GetTypeId ();
 }
 
 uint32_t
-QKDDelimiterHeader::GetSerializedSize () const
+QKDv6DelimiterHeader::GetSerializedSize () const
 {
   return sizeof(uint8_t);
 }
 
 void
-QKDDelimiterHeader::Serialize (Buffer::Iterator i) const
+QKDv6DelimiterHeader::Serialize (Buffer::Iterator i) const
 {  
     i.WriteU8 ((uint8_t) m_delimiter);
 }
 
 uint32_t
-QKDDelimiterHeader::Deserialize (Buffer::Iterator start)
+QKDv6DelimiterHeader::Deserialize (Buffer::Iterator start)
 { 
     Buffer::Iterator i = start;  
     m_delimiter = i.ReadU8 ();   
@@ -182,19 +182,19 @@ QKDDelimiterHeader::Deserialize (Buffer::Iterator start)
 }
 
 void
-QKDDelimiterHeader::Print (std::ostream &os) const
+QKDv6DelimiterHeader::Print (std::ostream &os) const
 {  
     os << "m_delimiter: " << (uint32_t) m_delimiter << "\n";
 }
 
 bool
-QKDDelimiterHeader::operator== (QKDDelimiterHeader const & o) const
+QKDv6DelimiterHeader::operator== (QKDv6DelimiterHeader const & o) const
 { 
     return (m_delimiter == o.m_delimiter);
 }
 
 std::ostream &
-operator<< (std::ostream & os, QKDDelimiterHeader const & h)
+operator<< (std::ostream & os, QKDv6DelimiterHeader const & h)
 {
     h.Print (os);
     return os;
@@ -202,14 +202,14 @@ operator<< (std::ostream & os, QKDDelimiterHeader const & h)
 
 
 void        
-QKDDelimiterHeader::SetDelimiterSize (uint32_t value){ 
+QKDv6DelimiterHeader::SetDelimiterSize (uint32_t value){ 
 
     NS_LOG_FUNCTION  (this << value); 
     m_delimiter = value;
 }
 
 uint32_t    
-QKDDelimiterHeader::GetDelimiterSize (void) const{
+QKDv6DelimiterHeader::GetDelimiterSize (void) const{
 
     NS_LOG_FUNCTION  (this << m_delimiter); 
     return (uint32_t) m_delimiter;
@@ -222,9 +222,9 @@ QKDDelimiterHeader::GetDelimiterSize (void) const{
 
 
 
-NS_OBJECT_ENSURE_REGISTERED (QKDHeader);
+NS_OBJECT_ENSURE_REGISTERED (QKDv6Header);
  
-QKDHeader::QKDHeader ():m_valid (true)
+QKDv6Header::QKDv6Header ():m_valid (true)
 { 
     m_length = 0;
     m_messageId = 0;
@@ -239,23 +239,23 @@ QKDHeader::QKDHeader ():m_valid (true)
 }
 
 TypeId
-QKDHeader::GetTypeId ()
+QKDv6Header::GetTypeId ()
 {
-  static TypeId tid = TypeId ("ns3::QKDHeader")
+  static TypeId tid = TypeId ("ns3::QKDv6Header")
     .SetParent<Header> ()
-    .AddConstructor<QKDHeader> ()
+    .AddConstructor<QKDv6Header> ()
   ;
   return tid;
 }
 
 TypeId
-QKDHeader::GetInstanceTypeId () const
+QKDv6Header::GetInstanceTypeId () const
 {
   return GetTypeId ();
 }
 
 uint32_t
-QKDHeader::GetSerializedSize () const
+QKDv6Header::GetSerializedSize () const
 {
   return 4  * sizeof(uint32_t) 
        + 1  * sizeof(uint16_t)
@@ -264,7 +264,7 @@ QKDHeader::GetSerializedSize () const
 }
 
 void
-QKDHeader::Serialize (Buffer::Iterator i) const
+QKDv6Header::Serialize (Buffer::Iterator i) const
 {
     i.WriteHtonU32 ((uint32_t) m_length);
     i.WriteHtonU32 ((uint32_t) m_messageId);
@@ -286,7 +286,7 @@ QKDHeader::Serialize (Buffer::Iterator i) const
 }
 
 uint32_t
-QKDHeader::Deserialize (Buffer::Iterator start)
+QKDv6Header::Deserialize (Buffer::Iterator start)
 {
 
     Buffer::Iterator i = start; 
@@ -334,7 +334,7 @@ QKDHeader::Deserialize (Buffer::Iterator start)
 }
 
 void
-QKDHeader::Print (std::ostream &os) const
+QKDv6Header::Print (std::ostream &os) const
 {  
     os << "\n"
        << "MESSAGE ID: "    << (uint32_t) m_messageId << "\t"
@@ -355,13 +355,13 @@ QKDHeader::Print (std::ostream &os) const
 }
 
 bool
-QKDHeader::operator== (QKDHeader const & o) const
+QKDv6Header::operator== (QKDv6Header const & o) const
 { 
     return (m_messageId == o.m_messageId && m_authenticationKeyId == o.m_authenticationKeyId && m_authTag == o.m_authTag);
 }
 
 std::ostream &
-operator<< (std::ostream & os, QKDHeader const & h)
+operator<< (std::ostream & os, QKDv6Header const & h)
 {
     h.Print (os);
     return os;
@@ -369,26 +369,26 @@ operator<< (std::ostream & os, QKDHeader const & h)
  
 
 void 		
-QKDHeader::SetLength (uint32_t value){ 
+QKDv6Header::SetLength (uint32_t value){ 
 
     NS_LOG_FUNCTION  (this << value); 
     m_length = value;
 }
 uint32_t 	
-QKDHeader::GetLength (void) const{
+QKDv6Header::GetLength (void) const{
 
     NS_LOG_FUNCTION  (this << m_length); 
     return m_length;
 }
 
 void 		
-QKDHeader::SetMessageId (uint32_t value){
+QKDv6Header::SetMessageId (uint32_t value){
     
     NS_LOG_FUNCTION  (this << value); 
     m_messageId = value;
 }
 uint32_t 	
-QKDHeader::GetMessageId (void) const{
+QKDv6Header::GetMessageId (void) const{
     
     NS_LOG_FUNCTION  (this << m_messageId); 
     return m_messageId;
@@ -396,13 +396,13 @@ QKDHeader::GetMessageId (void) const{
 
 
 void 		
-QKDHeader::SetEncrypted (uint32_t value){
+QKDv6Header::SetEncrypted (uint32_t value){
     
     NS_LOG_FUNCTION  (this << value); 
     m_encryped = value;
 }
 uint32_t 	
-QKDHeader::GetEncrypted (void) const{
+QKDv6Header::GetEncrypted (void) const{
 
     NS_LOG_FUNCTION  (this << m_encryped); 
     return (uint32_t) m_encryped;
@@ -410,13 +410,13 @@ QKDHeader::GetEncrypted (void) const{
 
 
 void 		
-QKDHeader::SetAuthenticated (uint32_t value){
+QKDv6Header::SetAuthenticated (uint32_t value){
 
     NS_LOG_FUNCTION  (this << value);
     m_authenticated = value;
 }
 uint32_t 	
-QKDHeader::GetAuthenticated (void) const{
+QKDv6Header::GetAuthenticated (void) const{
 
     NS_LOG_FUNCTION  (this << m_authenticated); 
     return (uint32_t) m_authenticated;
@@ -424,13 +424,13 @@ QKDHeader::GetAuthenticated (void) const{
 
 
 void 		
-QKDHeader::SetZipped (uint8_t value){
+QKDv6Header::SetZipped (uint8_t value){
 
     NS_LOG_FUNCTION  (this << value); 
     m_zipped = value;
 }
 uint8_t 	
-QKDHeader::GetZipped (void) const{
+QKDv6Header::GetZipped (void) const{
 
     NS_LOG_FUNCTION  (this << m_zipped); 
     return m_zipped;
@@ -438,13 +438,13 @@ QKDHeader::GetZipped (void) const{
 
 
 void 		
-QKDHeader::SetVersion (uint8_t value){
+QKDv6Header::SetVersion (uint8_t value){
 
     NS_LOG_FUNCTION  (this << value); 
     m_version = value;
 }
 uint8_t 	    
-QKDHeader::GetVersion (void) const{
+QKDv6Header::GetVersion (void) const{
 
     NS_LOG_FUNCTION  (this << m_version); 
     return m_version;
@@ -452,13 +452,13 @@ QKDHeader::GetVersion (void) const{
 
  
 void 		
-QKDHeader::SetChannelId (uint16_t value){
+QKDv6Header::SetChannelId (uint16_t value){
 
     NS_LOG_FUNCTION  (this << value); 
     m_channelId = value;
 }
 uint16_t 	
-QKDHeader::GetChannelId (void) const{
+QKDv6Header::GetChannelId (void) const{
 
     NS_LOG_FUNCTION  (this << m_channelId); 
     return m_channelId ; 
@@ -466,13 +466,13 @@ QKDHeader::GetChannelId (void) const{
 
 
 void 		
-QKDHeader::SetEncryptionKeyId (uint32_t value){
+QKDv6Header::SetEncryptionKeyId (uint32_t value){
 
     NS_LOG_FUNCTION  (this << value); 
     m_encryptionKeyId = value; 
 }
 uint32_t 	
-QKDHeader::GetEncryptionKeyId (void) const{
+QKDv6Header::GetEncryptionKeyId (void) const{
 
     NS_LOG_FUNCTION  (this << m_encryptionKeyId); 
     return m_encryptionKeyId;
@@ -480,13 +480,13 @@ QKDHeader::GetEncryptionKeyId (void) const{
 
 
 void 		
-QKDHeader::SetAuthenticationKeyId (uint32_t value){
+QKDv6Header::SetAuthenticationKeyId (uint32_t value){
 
     NS_LOG_FUNCTION  (this << value);  
     m_authenticationKeyId = value; 
 }
 uint32_t 	
-QKDHeader::GetAuthenticationKeyId (void) const{
+QKDv6Header::GetAuthenticationKeyId (void) const{
 
     NS_LOG_FUNCTION  (this << m_authenticationKeyId); 
     return m_authenticationKeyId;
@@ -494,13 +494,13 @@ QKDHeader::GetAuthenticationKeyId (void) const{
 
 
 void 		
-QKDHeader::SetAuthTag (std::string value){
+QKDv6Header::SetAuthTag (std::string value){
 
     NS_LOG_FUNCTION  (this << value << value.size());
     m_authTag = value;
 }
 std::string
-QKDHeader::GetAuthTag (void) const{
+QKDv6Header::GetAuthTag (void) const{
 
     NS_LOG_FUNCTION  (this << m_authTag << m_authTag.size());
     return m_authTag;

@@ -24,7 +24,7 @@
 #include <queue>
 #include "ns3/packet.h"
 #include "ns3/object.h"
-#include "ns3/ipv4-header.h" 
+#include "ns3/ipv6-header.h" 
 #include "ns3/traced-value.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/event-id.h"

@@ -32,7 +32,7 @@ namespace ns3 {
 /**
  * \ingroup qkd
  * \class QKDv6CommandHeader
- * \brief QKDv6CommandHeader is encrypted with packet payload while QKDHeader is not encrypted!
+ * \brief QKDv6CommandHeader is encrypted with packet payload while QKDv6Header is not encrypted!
  *  So QKDv6CommandHeader is able to carry info about the sensitive intrnal protocol commands 
  *  (LOAD, STORE, DATA...) and the type of first header in the list of headers (IPv4 or IPv6)
  * 
@@ -91,26 +91,26 @@ class QKDv6CommandHeader : public Header
 
 /**
  * \ingroup qkd
- * \class QKDDelimiterHeader
- * \brief QKDDelimiterHeader sits between the packets and it contains only
+ * \class QKDv6DelimiterHeader
+ * \brief QKDv6DelimiterHeader sits between the packets and it contains only
  *  one field (m_delimiter) which is actually the size of next header. 
- *  For example, in case of TCP, QKDDelimiterHeader sits between IPv4 and 
+ *  For example, in case of TCP, QKDv6DelimiterHeader sits between IPv4 and 
  *  TCP indicating the size of TCP header. The order of packets in this 
- *  case is IPv4, QKDDelimiterHeader, TCP, payload... In case of OLSR it 
+ *  case is IPv4, QKDv6DelimiterHeader, TCP, payload... In case of OLSR it 
  *  sits between OlsrPacketHeader and OLSRMessageHEader indicating the 
  *  size of OLSRMessageHeader which can vary. The order of packets in this 
- *  case is IPv4, UPD, OLSRPacketHeader, QKDDelimiterHeader, 
- *  OLSRMessageHeader, OLSRPacketHeader, QKDDelimiterHeader, 
+ *  case is IPv4, UPD, OLSRPacketHeader, QKDv6DelimiterHeader, 
+ *  OLSRMessageHeader, OLSRPacketHeader, QKDv6DelimiterHeader, 
  *  OLSRMessageHeader and etc.
  */   
-class QKDDelimiterHeader : public Header
+class QKDv6DelimiterHeader : public Header
 {
     public:
 
         /**
         * \brief Constructor
         */
-        QKDDelimiterHeader ();
+        QKDv6DelimiterHeader ();
 
         /**
         * \brief Get the type ID.
@@ -127,7 +127,7 @@ class QKDDelimiterHeader : public Header
         * \brief Print the header in the output stream
         */
         void        Print (std::ostream &os) const;
-        bool        operator== (QKDDelimiterHeader const & o) const;
+        bool        operator== (QKDv6DelimiterHeader const & o) const;
         uint32_t    GetSerializedSize () const;
         void        Serialize (Buffer::Iterator start) const;
         uint32_t    Deserialize (Buffer::Iterator start);
@@ -143,7 +143,7 @@ class QKDDelimiterHeader : public Header
 
 /**
  * \ingroup qkd
- * \class QKDHeader
+ * \class QKDv6Header
  * \brief QKD packet header that carries info about used encryption, auth tag and other.
  *
  * This class represents a single Q3P Message 
@@ -199,14 +199,14 @@ class QKDDelimiterHeader : public Header
  * 
  */     
 
-class QKDHeader : public Header
+class QKDv6Header : public Header
 {
     public:
 
         /**
         * \brief Constructor
         */
-        QKDHeader ();
+        QKDv6Header ();
 
         /**
         * \brief Get the type ID.
@@ -220,7 +220,7 @@ class QKDHeader : public Header
         TypeId      GetInstanceTypeId () const;
 
         void        Print (std::ostream &os) const;
-        bool        operator== (QKDHeader const & o) const;
+        bool        operator== (QKDv6Header const & o) const;
 
         uint32_t    GetSerializedSize () const;
 
