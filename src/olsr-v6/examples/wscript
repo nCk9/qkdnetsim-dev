@@ -1,0 +1,10 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    obj = bld.create_ns3_program('olsr-v6-example', ['olsr-v6'])
+    obj.source = [
+        'olsr-v6-example.cc',
+        'simple-point-to-point-olsr-v6.cc',
+        'olrs-v6-hna.cc',
+    ]
+

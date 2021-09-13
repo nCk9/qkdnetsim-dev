@@ -100,8 +100,8 @@ int main (int argc, char *argv[])
 
     //Enable OLSR
     //AodvHelper routingProtocol;
-    //OlsrHelper routingProtocol;
-    DsdvHelper routingProtocol; 
+    OlsrHelper routingProtocol;
+    // DsdvHelper routingProtocol; 
       
     InternetStackHelper internet;
     internet.SetRoutingHelper (routingProtocol);
