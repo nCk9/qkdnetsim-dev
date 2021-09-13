@@ -21,11 +21,11 @@
 #ifndef QKD_V6_HELPER_H
 #define QKD_V6_HELPER_H
 
-#include "ns3/qkd-v6.h" //add qkdV6-manager instead
+#include "ns3/qkd-v6-manager.h" //add qkdV6-manager instead
 #include <string>
 
 #include "ns3/object-factory.h"
-#include "ns3/qkd-graph-manager.h"  //change
+#include "ns3/qkd-v6-graph-manager.h"  //change
 #include "ns3/net-device-container.h"
 #include "ns3/node-container.h" 
 #include "ns3/trace-helper.h"
@@ -33,8 +33,8 @@
 #include "ns3/core-module.h"  
 #include "ns3/network-module.h"
 #include "ns3/internet-module.h" 
-#include "ns3/qkd-net-device.h"
-#include "ns3/qkd-crypto.h"
+#include "ns3/qkd-v6-net-device.h"
+#include "ns3/qkd-v6-crypto.h"
 
 namespace ns3 {
  
@@ -207,7 +207,7 @@ public:
     */
     NetDeviceContainer Install (std::string aName, Ptr<Node> b);
 
-    void InstallQKDManager (NodeContainer& n);  
+    void InstallQKDv6Manager (NodeContainer& n);  
 
     /**
     * \param aNode Name of first node
@@ -244,7 +244,7 @@ private:
     ObjectFactory m_tcpFactory;
 
     /**
-    * \brief IPv4 routing helper.
+    * \brief IPv6 routing helper.
     */
     const Ipv6RoutingHelper *m_routing;
  
@@ -254,7 +254,7 @@ private:
 
     bool     m_useRealStorages;
 
-    Ptr<QKDCrypto> m_QCrypto;
+    Ptr<QKDv6Crypto> m_QCrypto;
 
     uint32_t m_counter;
 

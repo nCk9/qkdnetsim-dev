@@ -40,6 +40,11 @@ QKDAppChargingHelper::QKDAppChargingHelper (std::string protocol, Ipv4Address ma
     SetSettings(protocol, master, slave, keyRate);
 }
 
+QKDAppChargingHelper::QKDAppChargingHelper (std::string protocol, Ipv6Address master, Ipv6Address slave, uint32_t keyRate)
+{
+    SetSettings(protocol, master, slave, keyRate);
+}
+
 void 
 QKDAppChargingHelper::SetSettings ( std::string protocol, Ipv4Address master, Ipv4Address slave, uint32_t keyRate)
 {
@@ -144,6 +149,159 @@ QKDAppChargingHelper::SetSettings ( std::string protocol, Ipv4Address master, Ip
     Address sinkAddress_temp8 (InetSocketAddress (Ipv4Address::GetAny (), port));
     Address masterAppRemoteAddress_temp8 (InetSocketAddress (master, port));
     Address slaveAppRemoteAddress_temp8 (InetSocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp8", AddressValue (sinkAddress_temp8)); 
+    m_factory_master_app.Set ("Remote_Temp8", AddressValue (slaveAppRemoteAddress_temp8));
+
+    /*************************
+    //      SLAVE
+    **************************/
+    m_factory_slave_app.SetTypeId ("ns3::QKDChargingApplication");
+    m_factory_slave_app.Set ("Protocol", StringValue (protocol));
+    m_factory_slave_app.Set ("KeyRate", UintegerValue (keyRate)); 
+    m_factory_slave_app.Set ("Local", AddressValue (sinkAddress));
+    m_factory_slave_app.Set ("Remote", AddressValue (masterAppRemoteAddress));
+
+    m_factory_slave_app.Set ("Local_Sifting", AddressValue (sinkAddress_sifting)); 
+    m_factory_slave_app.Set ("Remote_Sifting", AddressValue (masterAppRemoteAddress_sifting));
+
+    m_factory_slave_app.Set ("Local_Auth", AddressValue (sinkAddress_auth)); 
+    m_factory_slave_app.Set ("Remote_Auth", AddressValue (masterAppRemoteAddress_auth));
+
+    m_factory_slave_app.Set ("Local_Mthreshold", AddressValue (sinkAddress_mthreshold)); 
+    m_factory_slave_app.Set ("Remote_Mthreshold", AddressValue (masterAppRemoteAddress_mthreshold));
+
+    m_factory_slave_app.Set ("Local_Temp1", AddressValue (sinkAddress_temp1)); 
+    m_factory_slave_app.Set ("Remote_Temp1", AddressValue (masterAppRemoteAddress_temp1));
+
+    m_factory_slave_app.Set ("Local_Temp2", AddressValue (sinkAddress_temp2)); 
+    m_factory_slave_app.Set ("Remote_Temp2", AddressValue (masterAppRemoteAddress_temp2));
+
+    m_factory_slave_app.Set ("Local_Temp3", AddressValue (sinkAddress_temp3)); 
+    m_factory_slave_app.Set ("Remote_Temp3", AddressValue (masterAppRemoteAddress_temp3));
+
+    m_factory_slave_app.Set ("Local_Temp4", AddressValue (sinkAddress_temp4)); 
+    m_factory_slave_app.Set ("Remote_Temp4", AddressValue (masterAppRemoteAddress_temp4));
+
+    m_factory_slave_app.Set ("Local_Temp5", AddressValue (sinkAddress_temp5)); 
+    m_factory_slave_app.Set ("Remote_Temp5", AddressValue (masterAppRemoteAddress_temp5));
+
+    m_factory_slave_app.Set ("Local_Temp6", AddressValue (sinkAddress_temp6)); 
+    m_factory_slave_app.Set ("Remote_Temp6", AddressValue (masterAppRemoteAddress_temp6));
+
+    m_factory_slave_app.Set ("Local_Temp7", AddressValue (sinkAddress_temp7)); 
+    m_factory_slave_app.Set ("Remote_Temp7", AddressValue (masterAppRemoteAddress_temp7));
+
+    m_factory_slave_app.Set ("Local_Temp8", AddressValue (sinkAddress_temp8)); 
+    m_factory_slave_app.Set ("Remote_Temp8", AddressValue (masterAppRemoteAddress_temp8));
+
+    m_protocol = protocol;
+
+}
+
+void 
+QKDAppChargingHelper::SetSettings ( std::string protocol, Ipv6Address master, Ipv6Address slave, uint32_t keyRate)
+{
+    uint16_t port;
+
+    /*************************
+    //      MASTER
+    **************************/
+
+    port = 8000 + appCounter++; 
+    Address sinkAddress (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress (Inet6SocketAddress (slave, port));
+    m_factory_master_app.SetTypeId ("ns3::QKDChargingApplication");
+    m_factory_master_app.Set ("Protocol", StringValue (protocol));
+    m_factory_master_app.Set ("KeyRate", UintegerValue (keyRate)); 
+    m_factory_master_app.Set ("Local", AddressValue (sinkAddress)); 
+    m_factory_master_app.Set ("Remote", AddressValue (slaveAppRemoteAddress));
+
+    //Sifting
+    port = 8000 + appCounter++; 
+    Address sinkAddress_sifting (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_sifting (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_sifting (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Sifting", AddressValue (sinkAddress_sifting)); 
+    m_factory_master_app.Set ("Remote_Sifting", AddressValue (slaveAppRemoteAddress_sifting));
+   
+    //Auth
+    port = 8000 + appCounter++; 
+    Address sinkAddress_auth (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_auth (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_auth (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Auth", AddressValue (sinkAddress_auth)); 
+    m_factory_master_app.Set ("Remote_Auth", AddressValue (slaveAppRemoteAddress_auth));
+    
+    //Threshold
+    port = 8000 + appCounter++; 
+    Address sinkAddress_mthreshold (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_mthreshold (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_mthreshold (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Mthreshold", AddressValue (sinkAddress_mthreshold)); 
+    m_factory_master_app.Set ("Remote_Mthreshold", AddressValue (slaveAppRemoteAddress_mthreshold));
+    
+     //Temp1
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp1 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp1 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp1 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp1", AddressValue (sinkAddress_temp1)); 
+    m_factory_master_app.Set ("Remote_Temp1", AddressValue (slaveAppRemoteAddress_temp1));
+    
+    //Temp2
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp2 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp2 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp2 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp2", AddressValue (sinkAddress_temp2)); 
+    m_factory_master_app.Set ("Remote_Temp2", AddressValue (slaveAppRemoteAddress_temp2));
+
+    //Temp3
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp3 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp3 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp3 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp3", AddressValue (sinkAddress_temp3)); 
+    m_factory_master_app.Set ("Remote_Temp3", AddressValue (slaveAppRemoteAddress_temp3));
+
+    //Temp4
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp4 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp4 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp4 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp4", AddressValue (sinkAddress_temp4)); 
+    m_factory_master_app.Set ("Remote_Temp4", AddressValue (slaveAppRemoteAddress_temp4));
+
+    //Temp5
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp5 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp5 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp5 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp5", AddressValue (sinkAddress_temp5)); 
+    m_factory_master_app.Set ("Remote_Temp5", AddressValue (slaveAppRemoteAddress_temp5));
+
+    //Temp6
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp6 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp6 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp6 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp6", AddressValue (sinkAddress_temp6)); 
+    m_factory_master_app.Set ("Remote_Temp6", AddressValue (slaveAppRemoteAddress_temp6));
+     
+    //Temp7
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp7 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp7 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp7 (Inet6SocketAddress (slave, port));
+    m_factory_master_app.Set ("Local_Temp7", AddressValue (sinkAddress_temp7)); 
+    m_factory_master_app.Set ("Remote_Temp7", AddressValue (slaveAppRemoteAddress_temp7));
+
+    //Temp8
+    port = 8000 + appCounter++; 
+    Address sinkAddress_temp8 (Inet6SocketAddress (Ipv6Address::GetAny (), port));
+    Address masterAppRemoteAddress_temp8 (Inet6SocketAddress (master, port));
+    Address slaveAppRemoteAddress_temp8 (Inet6SocketAddress (slave, port));
     m_factory_master_app.Set ("Local_Temp8", AddressValue (sinkAddress_temp8)); 
     m_factory_master_app.Set ("Remote_Temp8", AddressValue (slaveAppRemoteAddress_temp8));
 

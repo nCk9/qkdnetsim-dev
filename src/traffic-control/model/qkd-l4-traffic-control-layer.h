@@ -176,6 +176,8 @@ public:
 
   void SetDownTarget (IpL4Protocol::DownTargetCallback cb); 
 
+  void SetDownTarget6 (IpL4Protocol::DownTargetCallback6 cb6);
+  
   IpL4Protocol::DownTargetCallback GetDownTarget (void) const; 
 
 protected:
@@ -185,6 +187,8 @@ protected:
   virtual void NotifyNewAggregate (void);
   
   IpL4Protocol::DownTargetCallback m_downTarget;   //!< Callback to send packets over IPv4
+  IpL4Protocol::DownTargetCallback6 m_downTarget6;   //!< Callback to send packets over IPv6
+
 
 private:
 

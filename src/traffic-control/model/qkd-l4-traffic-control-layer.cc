@@ -227,4 +227,15 @@ QKDL4TrafficControlLayer::GetDownTarget (void) const
   return m_downTarget;
 }
 
+/**
+* Define Down target which can be IPv6 or Virtual IPv6
+*/
+void
+QKDL4TrafficControlLayer::SetDownTarget6 (IpL4Protocol::DownTargetCallback6 callback)
+{
+  NS_LOG_FUNCTION (this << " on node " << m_node->GetId());
+  m_downTarget6 = callback;
+}
+
+
 } // namespace ns3
