@@ -25,6 +25,7 @@
 #include "ns3/node.h"
 #include "ns3/queue-item.h"
 #include "ns3/ipv4-route.h" 
+#include "ns3/ipv6-route.h" 
 #include "ns3/ip-l4-protocol.h"
 #include <map>
 #include <vector>
@@ -203,7 +204,15 @@ public:
                       uint8_t protocol,
                       Ptr<Ipv4Route> route);
 
+  virtual void DeliverToL3v6 (Ptr<Packet> packet, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route);
+
+
   virtual void SetDownTarget (IpL4Protocol::DownTargetCallback cb); 
+  virtual void SetDownTarget6 (IpL4Protocol::DownTargetCallback6 cb6); 
 
   virtual IpL4Protocol::DownTargetCallback GetDownTarget (void) const; 
    
@@ -217,6 +226,7 @@ protected:
   virtual void NotifyNewAggregate (void);
   
   IpL4Protocol::DownTargetCallback m_downTarget;   //!< Callback to send packets over IPv4
+  IpL4Protocol::DownTargetCallback6 m_downTarget6;   //!< Callback to send packets over IPv6
 
 private:
   /**

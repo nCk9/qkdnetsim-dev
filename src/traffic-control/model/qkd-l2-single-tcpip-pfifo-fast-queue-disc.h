@@ -49,7 +49,7 @@ namespace ns3 {
  * three, operate in packet mode and each have a capacity not less
  * than limit. No packet filter can be provided.
  *
- * \note The only difference is that it contacts QKDManager to process the
+ * \note The only difference is that it contacts QKDManager/QKDv6Manager to process the
  * packet (encrypt and/or authenticate) prior submission
  *
  */

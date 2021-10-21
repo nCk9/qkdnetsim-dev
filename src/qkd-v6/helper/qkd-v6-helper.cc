@@ -503,7 +503,7 @@ QKDv6Helper::InstallOverlayQKD(
     //Get address of classical device which is used for connection on the lower layer
     Ptr<Ipv6> ipv6a = a->GetObject<Ipv6L3Protocol> ();
     uint32_t interfaceOfClassicalDeviceOnNodeA = ipv6a->GetInterfaceForDevice(IPa);
-    Ipv6InterfaceAddress netA = ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 0);
+    Ipv6InterfaceAddress netA = ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 1);
 
  
     /////////////////////////////////
@@ -547,8 +547,7 @@ QKDv6Helper::InstallOverlayQKD(
     //Get address of classical device which is used for connection of QKDv6NetDevice on lower layer
     Ptr<Ipv6> ipv6b = b->GetObject<Ipv6L3Protocol> ();
     uint32_t interfaceOfClassicalDeviceOnNodeB = ipv6b->GetInterfaceForDevice(IPb);
-    Ipv6InterfaceAddress netB = ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 0);    
-    
+    Ipv6InterfaceAddress netB = ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 1);    
     Ptr<Socket> m_socketA;
     Ptr<Socket> m_socketB;
     Ptr<Socket> m_socketA_sink;
@@ -584,8 +583,8 @@ QKDv6Helper::InstallOverlayQKD(
     */
     if(typeId == "ns3::TcpSocketFactory"){
 
-        Address inetAddrA (Inet6SocketAddress (ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 0).GetAddress (), m_portOverlayNumber) ); 
-        Address inetAddrB (Inet6SocketAddress (ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 0).GetAddress (), m_portOverlayNumber) );
+        Address inetAddrA (Inet6SocketAddress (ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 1).GetAddress (), m_portOverlayNumber) ); 
+        Address inetAddrB (Inet6SocketAddress (ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 1).GetAddress (), m_portOverlayNumber) );
         
         // SINK SOCKETS
      
@@ -637,14 +636,14 @@ QKDv6Helper::InstallOverlayQKD(
     } else {
 
         //create UDP socket
-        Inet6SocketAddress inetAddrA (ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 0).GetAddress (), m_portOverlayNumber);
+        Inet6SocketAddress inetAddrA (ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 1).GetAddress (), m_portOverlayNumber);
         m_socketA = Socket::CreateSocket (a, TypeId::LookupByName ("ns3::UdpSocketFactory"));
         m_socketA->Bind ( inetAddrA );
         m_socketA->BindToNetDevice ( IPa );
         m_socketA->SetRecvCallback (MakeCallback (&QKDv6Manager::VirtualReceive, a->GetObject<QKDv6Manager> () )); 
 
         //create UDP socket
-        Inet6SocketAddress inetAddrB (ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 0).GetAddress (), m_portOverlayNumber);
+        Inet6SocketAddress inetAddrB (ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 1).GetAddress (), m_portOverlayNumber);
         m_socketB = Socket::CreateSocket (b, TypeId::LookupByName ("ns3::UdpSocketFactory"));
         m_socketB->Bind ( inetAddrB ); 
         m_socketB->BindToNetDevice ( IPb );
@@ -664,7 +663,7 @@ QKDv6Helper::InstallOverlayQKD(
     if( m_supportQKDL4 ){
 
         QKDL4TrafficControlHelper qkdTch;
-        uint16_t QKDhandle = qkdTch.SetRootQueueDisc ("ns3::QKDL4PfifoFastQueueDisc");
+        uint16_t QKDhandle = qkdTch.SetRootQueueDisc ("ns3::QKDv6L4PfifoFastQueueDisc");
         qkdTch.AddInternalQueues (QKDhandle, 3, "ns3::DropTailQueue<QueueDiscItem>", "MaxSize", StringValue ("1000p"));
         //qkdTch.AddPacketFilter (QKDhandle, "ns3::PfifoFastQKDPacketFilter");
         QueueDiscContainer QKDqdiscsA = qkdTch.Install (a);
@@ -673,20 +672,20 @@ QKDv6Helper::InstallOverlayQKD(
         //NODE A
         //Forward UDP communication from L4 to QKD Queues
         Ptr<VirtualUdpL4Protocol> udpA = a->GetObject<VirtualUdpL4Protocol> (); 
-        udpA->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, a->GetObject<QKDL4TrafficControlLayer> ()));
+        udpA->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, a->GetObject<QKDL4TrafficControlLayer> ()));
 
         //Forward TCP communication from L4 to QKD Queues
         Ptr<VirtualTcpL4Protocol> tcpA = a->GetObject<VirtualTcpL4Protocol> (); 
-        tcpA->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, a->GetObject<QKDL4TrafficControlLayer> ()));
+        tcpA->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, a->GetObject<QKDL4TrafficControlLayer> ()));
 
         //NODE B
         //Forward UDP communication from L4 to QKD Queues
         Ptr<VirtualUdpL4Protocol> udpB = b->GetObject<VirtualUdpL4Protocol> (); 
-        udpB->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, b->GetObject<QKDL4TrafficControlLayer> () ));
+        udpB->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, b->GetObject<QKDL4TrafficControlLayer> () ));
 
         //Forward TCP communication from L4 to QKD Queues
         Ptr<VirtualTcpL4Protocol> tcpB = b->GetObject<VirtualTcpL4Protocol> (); 
-        tcpB->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, b->GetObject<QKDL4TrafficControlLayer> ()));
+        tcpB->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, b->GetObject<QKDL4TrafficControlLayer> ()));
         
         //------------------------------------------
         // Forward from QKD Queues to Virtual IPv6 L3
@@ -831,8 +830,7 @@ QKDv6Helper::InstallQKD(
     //Get address of classical device which is used for connection on the lower layer
     Ptr<Ipv6> ipv6a = a->GetObject<Ipv6L3Protocol> ();
     uint32_t interfaceOfClassicalDeviceOnNodeA = ipv6a->GetInterfaceForDevice(IPa);
-    Ipv6InterfaceAddress netA = ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 0);
-      
+    Ipv6InterfaceAddress netA = ipv6a->GetAddress (interfaceOfClassicalDeviceOnNodeA, 1);
     /////////////////////////////////
     //          NODE B
     /////////////////////////////////
@@ -846,7 +844,7 @@ QKDv6Helper::InstallQKD(
     //Get address of classical device which is used for connection of QKDv6NetDevice on lower layer
     Ptr<Ipv6> ipv6b = b->GetObject<Ipv6L3Protocol> ();
     uint32_t interfaceOfClassicalDeviceOnNodeB = ipv6b->GetInterfaceForDevice(IPb);
-    Ipv6InterfaceAddress netB = ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 0);    
+    Ipv6InterfaceAddress netB = ipv6b->GetAddress (interfaceOfClassicalDeviceOnNodeB, 1);    
     
     Ptr<Socket> m_socketA;
     Ptr<Socket> m_socketB;
@@ -864,7 +862,7 @@ QKDv6Helper::InstallQKD(
     if (m_supportQKDL4) {
 
         QKDL4TrafficControlHelper qkdTch;
-        uint16_t QKDhandle = qkdTch.SetRootQueueDisc ("ns3::QKDL4PfifoFastQueueDisc");
+        uint16_t QKDhandle = qkdTch.SetRootQueueDisc ("ns3::QKDv6L4PfifoFastQueueDisc");
         qkdTch.AddInternalQueues (QKDhandle, 3, "ns3::DropTailQueue<QueueDiscItem>", "MaxSize", StringValue ("1000p"));
         //qkdTch.AddPacketFilter (QKDhandle, "ns3::PfifoFastQKDPacketFilter");
         QueueDiscContainer QKDqdiscsA = qkdTch.Install (a);
@@ -877,7 +875,7 @@ QKDv6Helper::InstallQKD(
 
        //Forward L4 communication to IPv6 L3
         Ptr<QKDL4TrafficControlLayer> QKDTCLa = a->GetObject<QKDL4TrafficControlLayer> (); 
-        IpL4Protocol::DownTargetCallback qkdl4DownTarget_a = QKDTCLa->GetDownTarget();
+        IpL4Protocol::DownTargetCallback6 qkdl4DownTarget_a = QKDTCLa->GetDownTargetv6();
 
         //Set it only once, otherwise we will finish in infinite loop
         if(qkdl4DownTarget_a.IsNull()){
@@ -886,29 +884,29 @@ QKDv6Helper::InstallQKD(
             Ptr<UdpL4Protocol> udpA = a->GetObject<UdpL4Protocol> (); 
             Ptr<TcpL4Protocol> tcpA = a->GetObject<TcpL4Protocol> (); 
 
-            IpL4Protocol::DownTargetCallback udpA_L4_downTarget = udpA->GetDownTarget ();
-            IpL4Protocol::DownTargetCallback tcpA_L4_downTarget = tcpA->GetDownTarget ();
+            IpL4Protocol::DownTargetCallback6 udpA_L4_downTarget = udpA->GetDownTarget6 ();
+            IpL4Protocol::DownTargetCallback6 tcpA_L4_downTarget = tcpA->GetDownTarget6 ();
 
             if(!udpA_L4_downTarget.IsNull ())
-                QKDTCLa->SetDownTarget (udpA_L4_downTarget);
+                QKDTCLa->SetDownTarget6 (udpA_L4_downTarget);
             else if(!tcpA_L4_downTarget.IsNull ())
-                QKDTCLa->SetDownTarget (tcpA_L4_downTarget);
+                QKDTCLa->SetDownTarget6 (tcpA_L4_downTarget);
             else
                 NS_ASSERT (!udpA_L4_downTarget.IsNull ());
             //QKDTCLa->SetDownTarget (MakeCallback (&Ipv6L3Protocol::Send, a->GetObject<Ipv6L3Protocol> ()));
 
             //NODE A
             //Forward UDP communication from L4 to QKD Queues
-            udpA->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, a->GetObject<QKDL4TrafficControlLayer> ()));
+            udpA->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, a->GetObject<QKDL4TrafficControlLayer> ()));
             //Forward TCP communication from L4 to QKD Queues
-            tcpA->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, a->GetObject<QKDL4TrafficControlLayer> ()));
+            tcpA->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, a->GetObject<QKDL4TrafficControlLayer> ()));
 
         }
 
 
 
         Ptr<QKDL4TrafficControlLayer> QKDTCLb = b->GetObject<QKDL4TrafficControlLayer> (); 
-        IpL4Protocol::DownTargetCallback qkdl4DownTarget_b = QKDTCLb->GetDownTarget();
+        IpL4Protocol::DownTargetCallback6 qkdl4DownTarget_b = QKDTCLb->GetDownTargetv6();
         
         //Set it only once, otherwise we will finish in infinite loop
         if(qkdl4DownTarget_b.IsNull()){
@@ -918,22 +916,22 @@ QKDv6Helper::InstallQKD(
             Ptr<TcpL4Protocol> tcpB = b->GetObject<TcpL4Protocol> (); 
 
             //Forward L4 communication to IPv6 L3
-            IpL4Protocol::DownTargetCallback udpB_L4_downTarget = udpB->GetDownTarget ();
-            IpL4Protocol::DownTargetCallback tcpB_L4_downTarget = tcpB->GetDownTarget ();
+            IpL4Protocol::DownTargetCallback6 udpB_L4_downTarget = udpB->GetDownTarget6 ();
+            IpL4Protocol::DownTargetCallback6 tcpB_L4_downTarget = tcpB->GetDownTarget6 ();
 
             if(!udpB_L4_downTarget.IsNull ())
-                QKDTCLb->SetDownTarget (udpB_L4_downTarget);
+                QKDTCLb->SetDownTarget6 (udpB_L4_downTarget);
             else if(!tcpB_L4_downTarget.IsNull ())
-                QKDTCLb->SetDownTarget (tcpB_L4_downTarget);
+                QKDTCLb->SetDownTarget6 (tcpB_L4_downTarget);
             else
                 NS_ASSERT (!udpB_L4_downTarget.IsNull ());
             //QKDTCLb->SetDownTarget (MakeCallback (&Ipv6L3Protocol::Send, b->GetObject<Ipv6L3Protocol> ()));
      
             //NODE B
             //Forward UDP communication from L4 to QKD Queues
-            udpB->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, b->GetObject<QKDL4TrafficControlLayer> () ));
+            udpB->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, b->GetObject<QKDL4TrafficControlLayer> () ));
             //Forward TCP communication from L4 to QKD Queues
-            tcpB->SetDownTarget (MakeCallback (&QKDL4TrafficControlLayer::Send, b->GetObject<QKDL4TrafficControlLayer> ()));
+            tcpB->SetDownTarget6 (MakeCallback (&QKDL4TrafficControlLayer::Sendv6, b->GetObject<QKDL4TrafficControlLayer> ()));
             
         }
 

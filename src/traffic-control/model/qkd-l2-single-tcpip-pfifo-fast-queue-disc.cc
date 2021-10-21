@@ -29,6 +29,7 @@
 #include "pfifo-fast-queue-disc.h"
 #include "qkd-l2-single-tcpip-pfifo-fast-queue-disc.h"
 #include "ns3/qkd-manager.h" 
+#include "ns3/qkd-v6-manager.h" 
 
 namespace ns3 {
  
@@ -109,9 +110,17 @@ QKDL2SingleTCPIPPfifoFastQueueDisc::DoDequeue (void)
   Ptr<NetDevice> tempDevice = GetNetDevice();
   NS_LOG_FUNCTION (this << "on node:" << tempDevice->GetNode ()->GetId() );
 
-  uint16_t QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDManager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
-  NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
-
+  uint16_t QKDbufferStatus;
+  if(tempDevice->GetNode ()->GetObject<QKDManager> () != 0)
+  {
+    QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDManager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
+    NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
+  }
+  else
+  {
+    QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDv6Manager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
+    NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
+  }
   Ptr<QueueDiscItem> item;
 
   NS_LOG_LOGIC ("Number packets band 0: " << GetInternalQueue (0)->GetNPackets ());
@@ -132,7 +141,22 @@ QKDL2SingleTCPIPPfifoFastQueueDisc::DoDequeue (void)
               return item;
         }
     }
-  }else{    
+  }else if(QKDbufferStatus == QKDv6Buffer::QKDSTATUS_EMPTY)
+  {
+    NS_LOG_FUNCTION (this << QKDbufferStatus << "QKDv6Buffer::QKDSTATUS_EMPTY");
+
+    if (GetInternalQueue (0)->GetNPackets ())
+    {
+      if ((item = StaticCast<QueueDiscItem> (GetInternalQueue (0)->Dequeue ())) != 0)
+        {
+              NS_LOG_LOGIC ("Popped from band 0: " << item);
+              NS_LOG_LOGIC ("Number packets band 0: " << GetInternalQueue (0)->GetNPackets ());
+              return item;
+        }
+    }
+  }
+  else
+  {    
 
     if(QKDbufferStatus == 0)
         NS_LOG_FUNCTION (this << QKDbufferStatus << "QKDBuffer::QKDSTATUS_READY");
@@ -250,7 +274,7 @@ QKDL2SingleTCPIPPfifoFastQueueDisc::InitializeParams (void)
 * - Requeue
 * - Transmit
 * 
-* because we need to add calls to QKDManager to perform encryption and authentication!
+* because we need to add calls to QKDManager/QKDv6Manager to perform encryption and authentication!
 */
 
 Ptr<Node>
@@ -413,9 +437,16 @@ QKDL2SingleTCPIPPfifoFastQueueDisc::TransmitL2 (Ptr<QueueDiscItem> item)
     }
  
   //PRIOR SENDING TO NetDevice, send to QKDManager for encryption/authentication
-  Ptr<QKDManager> manager = GetNetDevice()->GetNode ()->GetObject<QKDManager> ();
-  manager->VirtualSend (item->GetPacket (), GetNetDevice()->GetAddress(), item->GetAddress (), item->GetProtocol (), item->GetTxQueueIndex ());
-
+  if(GetNetDevice ()->GetNode ()->GetObject<QKDManager> () != 0)
+  {
+    Ptr<QKDManager> manager = GetNetDevice()->GetNode ()->GetObject<QKDManager> ();
+    manager->VirtualSend (item->GetPacket (), GetNetDevice()->GetAddress(), item->GetAddress (), item->GetProtocol (), item->GetTxQueueIndex ());
+  }
+  else
+  {
+    Ptr<QKDv6Manager> manager = GetNetDevice ()->GetNode ()->GetObject<QKDv6Manager> ();
+    manager->VirtualSend(item->GetPacket (), GetNetDevice ()->GetAddress (), item->GetAddress (), item->GetProtocol (), item->GetTxQueueIndex ());
+  }
   // the behavior here slightly diverges from Linux. In Linux, it is advised that
   // the function called when a packet needs to be transmitted (ndo_start_xmit)
   // should always return NETDEV_TX_OK, which means that the packet is consumed by

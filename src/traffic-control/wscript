@@ -27,6 +27,7 @@ def build(bld):
       'model/qkd-l4-traffic-control-layer.cc',
       'model/qkd-l2-pfifo-fast-queue-disc.cc',
       'model/qkd-l4-pfifo-fast-queue-disc.cc',
+      'model/qkd-v6-l4-pfifo-fast-queue-disc.cc',
       'model/qkd-l2-single-tcpip-pfifo-fast-queue-disc.cc',
         ]
 
@@ -64,6 +65,7 @@ def build(bld):
       'model/qkd-l4-traffic-control-layer.h',
       'model/qkd-l2-pfifo-fast-queue-disc.h',
       'model/qkd-l4-pfifo-fast-queue-disc.h',
+      'model/qkd-v6-l4-pfifo-fast-queue-disc.h',
       'model/qkd-l2-single-tcpip-pfifo-fast-queue-disc.h'
         ]
 

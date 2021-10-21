@@ -396,6 +396,22 @@ TrafficControlLayer::DeliverToL3 (Ptr<Packet> p,
     m_downTarget (p, source, destination, protocol, route ); 
   }
 }
+void
+TrafficControlLayer::DeliverToL3v6 (Ptr<Packet> p, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route)
+{
+  NS_LOG_FUNCTION (this << p->GetUid() << source << destination << protocol << route);
+  
+  if(m_downTarget.IsNull ()){
+    NS_LOG_FUNCTION(this << "m_downTarget on node " << m_node->GetId() << " is EMPTY!!!");
+  }else{
+    NS_LOG_FUNCTION(this << "m_downTarget on node " << m_node->GetId() << " is valid");
+    m_downTarget6 (p, source, destination, protocol, route ); 
+  }
+}
 
 /**
 * Define Down target which can be IPv4 or Virtual IPv4
@@ -405,6 +421,12 @@ TrafficControlLayer::SetDownTarget (IpL4Protocol::DownTargetCallback callback)
 {
   NS_LOG_FUNCTION (this << " on node " << m_node->GetId());
   m_downTarget = callback;
+}
+void
+TrafficControlLayer::SetDownTarget6 (IpL4Protocol::DownTargetCallback6 callback)
+{
+  NS_LOG_FUNCTION (this << " on node " << m_node->GetId());
+  m_downTarget6 = callback;
 }
 
 IpL4Protocol::DownTargetCallback

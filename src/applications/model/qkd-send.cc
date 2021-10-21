@@ -167,9 +167,16 @@ QKDSend::SendPacket (void)
     NS_LOG_FUNCTION (this);
 
     Ptr<Packet> packet = Create<Packet> (m_packetSize); 
-    packet = m_socket->GetNode()->GetObject<QKDManager> ()->MarkEncrypt  (packet, QKDCRYPTO_OTP, QKDCRYPTO_AUTH_VMAC); 
-    packet = m_socket->GetNode()->GetObject<QKDManager> ()->MarkMaxDelay (packet, m_timeDelayLimit);
-
+    if(m_socket->GetNode()->GetObject<QKDManager> () != 0)
+    {
+      packet = m_socket->GetNode()->GetObject<QKDManager> ()->MarkEncrypt  (packet, QKDCRYPTO_OTP, QKDCRYPTO_AUTH_VMAC); 
+      packet = m_socket->GetNode()->GetObject<QKDManager> ()->MarkMaxDelay (packet, m_timeDelayLimit);
+    }
+    else if(m_socket->GetNode()->GetObject<QKDv6Manager> () != 0)
+    {
+      packet = m_socket->GetNode()->GetObject<QKDv6Manager> ()->MarkEncrypt  (packet, QKDCRYPTO_OTP, QKDCRYPTO_AUTH_VMAC); 
+      packet = m_socket->GetNode()->GetObject<QKDv6Manager> ()->MarkMaxDelay (packet, m_timeDelayLimit);
+    }
     NS_ASSERT (packet != 0);
     NS_LOG_FUNCTION (this << packet->GetUid() << packet->GetSize() );
 

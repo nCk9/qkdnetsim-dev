@@ -21,12 +21,12 @@
  *           Miralem Mehic <miralem.mehic@ieee.org>
  */
 
-#ifndef QKD_L4_PFIFO_FAST_H
-#define QKD_L4_PFIFO_FAST_H
+#ifndef QKD_V6_L4_PFIFO_FAST_H
+#define QKD_V6_L4_PFIFO_FAST_H
 
 #include "ns3/queue-disc.h"
 #include "ns3/ip-l4-protocol.h" 
-#include "ns3/qkd-queue-disc-item.h"
+#include "ns3/qkd-v6-queue-disc-item.h"
 
 namespace ns3 {
 
@@ -53,7 +53,7 @@ namespace ns3 {
  * and L4 ISO/OSI layer to avoid conflicts in decision making
  * which could lead to inaccurate routing. Experimental testing and usage!
  */
-class QKDL4PfifoFastQueueDisc : public QueueDisc {
+class QKDv6L4PfifoFastQueueDisc : public QueueDisc {
 public:
   /**
    * \brief Get the type ID.
@@ -61,13 +61,13 @@ public:
    */
   static TypeId GetTypeId (void);
   /**
-   * \brief QKDL4PfifoFastQueueDisc constructor
+   * \brief QKDv6L4PfifoFastQueueDisc constructor
    *
    * Creates a queue with a depth of 1000 packets per band by default
    */
-  QKDL4PfifoFastQueueDisc ();
+  QKDv6L4PfifoFastQueueDisc ();
 
-  virtual ~QKDL4PfifoFastQueueDisc(); 
+  virtual ~QKDv6L4PfifoFastQueueDisc(); 
 
   // Reasons for dropping packets
   static constexpr const char* LIMIT_EXCEEDED_DROP = "Queue disc limit exceeded";  //!< Packet dropped due to queue disc limit exceeded
@@ -115,14 +115,14 @@ private:
    * Modelled after the Linux function dequeue_skb (net/sched/sch_generic.c)
    * \return the requeued packet, if any, or the packet dequeued by the queue disc, otherwise.
    */
-  Ptr<QKDQueueDiscItem> DequeuePacketL4 (void);
+  Ptr<QKDv6QueueDiscItem> DequeuePacketL4 (void);
 
   /**
    * Modelled after the Linux function dev_requeue_skb (net/sched/sch_generic.c)
    * Requeues a packet whose transmission failed.
    * \param p the packet to requeue
    */
-  void RequeueL4 (Ptr<QKDQueueDiscItem> p);
+  void RequeueL4 (Ptr<QKDv6QueueDiscItem> p);
 
   /**
    * Modelled after the Linux function sch_direct_xmit (net/sched/sch_generic.c)
@@ -130,7 +130,7 @@ private:
    * \param p the packet to transmit
    * \return true if the transmission succeeded and the queue is not stopped
    */
-  bool TransmitL4 (Ptr<QKDQueueDiscItem> p);
+  bool TransmitL4 (Ptr<QKDv6QueueDiscItem> p);
   /**
    * \brief Set node associated with this stack.
    * \param node node to set
@@ -150,7 +150,7 @@ private:
   TracedValue<uint32_t> m_nPacketsL4; //!< Number of packets in the queue
   TracedValue<uint32_t> m_nBytesL4;   //!< Number of bytes in the queue
   Ptr<Node> m_node;
-  Ptr<QKDQueueDiscItem> m_requeued;    //!< The last packet that failed to be transmitted
+  Ptr<QKDv6QueueDiscItem> m_requeued;    //!< The last packet that failed to be transmitted
  
   /// Traced callback: fired when a packet is enqueued
   TracedCallback<Ptr<const QueueItem> > m_traceEnqueueL4; 
@@ -165,4 +165,4 @@ private:
 
 } // namespace ns3
 
-#endif /* QKD_PFIFO_FAST_H */
+#endif 

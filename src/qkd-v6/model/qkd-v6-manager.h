@@ -43,7 +43,7 @@
 
 namespace ns3 {
 
-    struct NeigborDetail{ 
+    struct NeigborDetailv6{ 
       uint32_t    interface;
       Address     sourceAddress; //MAC address of source netDevice
       float       distance; //Geographical distance
@@ -479,7 +479,7 @@ namespace ns3 {
         */
         Ipv6Address PopulateLinkStatusesForNeighbors( 
             Ptr<Packet> p, 
-            std::map<Ipv6Address, NeigborDetail> distancesToDestination,
+            std::map<Ipv6Address, NeigborDetailv6> distancesToDestination,
             uint8_t tos,
             uint32_t& outputInterface 
         );

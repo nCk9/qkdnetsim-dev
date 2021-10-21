@@ -31,7 +31,7 @@
 
 #include "ns3/dsdv-packet.h"  
 #include "ns3/aodv-packet.h" 
-#include "ns3/olsr-header.h" 
+#include "ns3/olsr-v6-header.h" 
 
 #include "ns3/packet.h"
 #include "ns3/packet-metadata.h"
@@ -100,12 +100,12 @@ namespace ns3 {
  *  the packet into a byte array which is used as the input in cryptographic algorithms and schemes.
  *
  *  The main idea behind QKDv6Crypto is to convert packet payload and its header to string and perform cryptographic operations over that string. Since some headers have variable length, 
- *  like TCP or OLSR, then and there is no field indicating the size of these headers (there is only field indicating whole packet size in IPv4 header) it is difficult to distinguish between
+ *  like TCP or OLSR6, then and there is no field indicating the size of these headers (there is only field indicating whole packet size in IPv4 header) it is difficult to distinguish between
  *  packet payload and end of packet's header. Therefore, we use a small trick to add a QKDv6DelimiterHeader to help us in this process. This header sits between the packets and it contains only
  *  one field (m_delimiter) which is actually the size of next header. For example, in case of TCP, QKDv6DelimiterHeader sits between IPv4 and TCP indicating the size of TCP header. 
- *  The order of packets in this case is IPv4, QKDv6DelimiterHeader, TCP, payload... In case of OLSR it sits between OlsrPacketHeader and OLSRMessageHEader indicating the 
- *  size of OLSRMessageHeader which can vary. The order of packets in this case is IPv4, UPD, OLSRPacketHeader, QKDv6DelimiterHeader, OLSRMessageHeader, OLSRPacketHeader, QKDv6DelimiterHeader, 
- *  OLSRMessageHeader and etc.
+ *  The order of packets in this case is IPv4, QKDv6DelimiterHeader, TCP, payload... In case of OLSR6 it sits between Olsr6PacketHeader and OLSR6MessageHEader indicating the 
+ *  size of OLSR6MessageHeader which can vary. The order of packets in this case is IPv4, UPD, OLSR6PacketHeader, QKDv6DelimiterHeader, OLSR6MessageHeader, OLSR6PacketHeader, QKDv6DelimiterHeader, 
+ *  OLSR6MessageHeader and etc.
  *
  *  Post taken from ns-3-users google group by Tommaso Pecorella:
  *  https://groups.google.com/forum/#!searchin/ns-3-users/A$20Buffer$20does$20NOT$20hold$20just$20the$20header$20(or$20packet)$20content$2C$20it$20contains$20also$20the$20packet$20metadata.%7Csort:relevance/ns-3-users/zfS7DBVs8RM/XUgaFlHABAAJ
@@ -426,8 +426,8 @@ private:
     //UDP
     uint32_t m_udpHeaderSize;
 
-    //OLSR
-    uint32_t m_olsrPacketHeaderSize;
+    //OLSR6
+    uint32_t m_olsr6PacketHeaderSize;
  
     //DSDVQ
     uint32_t m_dsdvqHeaderSize;

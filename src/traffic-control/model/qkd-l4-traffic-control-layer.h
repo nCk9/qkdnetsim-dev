@@ -28,12 +28,14 @@
 #include "queue-disc.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/ipv4-route.h"
+#include "ns3/ipv6-route.h"
 #include "ns3/queue-item.h"
  
 #include "ns3/ipv6-address.h"
 #include "ns3/sequence-number.h"
 #include "ns3/ip-l4-protocol.h" 
 #include "ns3/qkd-queue-disc-item.h"
+#include "ns3/qkd-v6-queue-disc-item.h"
 
 #include <map>
 #include <vector>
@@ -168,17 +170,32 @@ public:
                       uint8_t protocol,
                       Ptr<Ipv4Route> route);
 
+  void Sendv6 (Ptr<Packet> packet, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route);
+
+
   void DeliverToL3 (Ptr<Packet> packet, 
                       Ipv4Address source,
                       Ipv4Address destination,
                       uint8_t protocol,
                       Ptr<Ipv4Route> route);
 
+  void DeliverToL3v6 (Ptr<Packet> packet, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route);
+
+
   void SetDownTarget (IpL4Protocol::DownTargetCallback cb); 
 
   void SetDownTarget6 (IpL4Protocol::DownTargetCallback6 cb6);
   
   IpL4Protocol::DownTargetCallback GetDownTarget (void) const; 
+  IpL4Protocol::DownTargetCallback6 GetDownTargetv6 (void) const; 
 
 protected:
 

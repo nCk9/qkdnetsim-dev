@@ -254,7 +254,7 @@ QKDv6Manager::GetMapOfSourceDestinationAddresses(){
 Ipv6Address
 QKDv6Manager::PopulateLinkStatusesForNeighbors(
     Ptr<Packet> p, 
-    std::map<Ipv6Address, NeigborDetail> distancesToDestination,
+    std::map<Ipv6Address, NeigborDetailv6> distancesToDestination,
     uint8_t tos,
     uint32_t& outputInterface
 ){

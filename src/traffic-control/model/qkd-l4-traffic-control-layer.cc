@@ -189,6 +189,22 @@ QKDL4TrafficControlLayer::Send (Ptr<Packet> p,
   m_rootQueueDiscs[0]->Run (); 
 }
 
+void
+QKDL4TrafficControlLayer::Sendv6 (Ptr<Packet> p, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route)
+{
+  NS_LOG_FUNCTION (this << p->GetUid() << source << destination << protocol << route);
+
+  NS_LOG_DEBUG ("Protocol number " << protocol);
+
+  Ptr<QKDv6QueueDiscItem> item = Create<QKDv6QueueDiscItem> (p, source, destination, protocol, route);
+  m_rootQueueDiscs[0]->Enqueue (item);
+  m_rootQueueDiscs[0]->Run (); 
+}
+
 /**
 * FORWARD FROM QUEUE TO LOWER LAERS
 */
@@ -206,6 +222,24 @@ QKDL4TrafficControlLayer::DeliverToL3 (Ptr<Packet> p,
   }else{
     NS_LOG_FUNCTION(this << "m_downTarget on node " << m_node->GetId() << " is valid!");
     m_downTarget (p, source, destination, protocol, route ); 
+  }
+ 
+}
+
+void
+QKDL4TrafficControlLayer::DeliverToL3v6 (Ptr<Packet> p, 
+                      Ipv6Address source,
+                      Ipv6Address destination,
+                      uint8_t protocol,
+                      Ptr<Ipv6Route> route)
+{
+  NS_LOG_FUNCTION (this << p->GetUid() << source << destination << protocol << route);
+ 
+  if(m_downTarget6.IsNull ()){
+    NS_LOG_FUNCTION(this << "m_downTarget on node " << m_node->GetId() << " is EMPTY!!!");
+  }else{
+    NS_LOG_FUNCTION(this << "m_downTarget on node " << m_node->GetId() << " is valid!");
+    m_downTarget6 (p, source, destination, protocol, route ); 
   }
  
 }
@@ -235,6 +269,13 @@ QKDL4TrafficControlLayer::SetDownTarget6 (IpL4Protocol::DownTargetCallback6 call
 {
   NS_LOG_FUNCTION (this << " on node " << m_node->GetId());
   m_downTarget6 = callback;
+}
+
+IpL4Protocol::DownTargetCallback6
+QKDL4TrafficControlLayer::GetDownTargetv6 (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_downTarget6;
 }
 
 

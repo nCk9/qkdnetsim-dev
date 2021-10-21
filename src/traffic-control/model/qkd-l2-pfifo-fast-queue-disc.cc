@@ -26,6 +26,7 @@
 #include "ns3/socket.h" 
 #include "qkd-l2-pfifo-fast-queue-disc.h"
 #include "ns3/qkd-manager.h"
+#include "ns3/qkd-v6-manager.h"
 #include "ns3/qkd-queue-disc-item.h" 
 
 namespace ns3 {
@@ -107,9 +108,17 @@ QKDL2PfifoFastQueueDisc::DoDequeue (void)
   Ptr<NetDevice> tempDevice = GetNetDevice();
   NS_LOG_FUNCTION (this << "on node:" << tempDevice->GetNode ()->GetId() );
 
-  uint16_t QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDManager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
-  NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
-
+  uint16_t QKDbufferStatus;
+  if(tempDevice->GetNode ()->GetObject<QKDManager> () != 0)
+  {
+    QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDManager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
+    NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
+  }
+  else 
+  {
+    QKDbufferStatus = tempDevice->GetNode ()->GetObject<QKDv6Manager> ()->FetchStatusForDestinationBuffer(GetNetDevice ());
+    NS_LOG_FUNCTION (this << "status" << QKDbufferStatus);
+  }
   Ptr<QueueDiscItem> item;
 
   NS_LOG_LOGIC ("Number packets band 0: " << GetInternalQueue (0)->GetNPackets ());
@@ -130,7 +139,20 @@ QKDL2PfifoFastQueueDisc::DoDequeue (void)
               return item;
         }
     }
-  }else{    
+  }else if(QKDbufferStatus == QKDv6Buffer::QKDSTATUS_EMPTY){
+
+    NS_LOG_FUNCTION (this << QKDbufferStatus << "QKDv6Buffer::QKDSTATUS_EMPTY");
+    if(GetInternalQueue (0)->GetNPackets ())
+    {
+      if ((item = StaticCast<QueueDiscItem> (GetInternalQueue (0)->Dequeue ())) != 0)
+        {
+              NS_LOG_LOGIC ("Popped from band 0: " << item);
+              NS_LOG_LOGIC ("Number packets band 0: " << GetInternalQueue (0)->GetNPackets ());
+              return item;
+        }
+    }
+  }
+  else{    
 
     if(QKDbufferStatus == 0)
         NS_LOG_FUNCTION (this << QKDbufferStatus << "QKDBuffer::QKDSTATUS_READY");

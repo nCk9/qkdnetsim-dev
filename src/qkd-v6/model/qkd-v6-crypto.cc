@@ -41,7 +41,7 @@
 #include "ns3/aodv-packet.h"
 #include "ns3/aodvq-packet.h"
 
-#include "ns3/olsr-header.h" 
+#include "ns3/olsr-v6-header.h" 
 
 #include "ns3/node.h"
 #include "ns3/qkd-v6-internal-tag.h"
@@ -766,7 +766,7 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             delete[] headerSerializedBuffer;
                        
         ////////////////////////////////////////
-        //  ICMPv4 Echo Header Serialize
+        //  ICMPv6 Echo Header Serialize
         ///////////////////////////////////////
 
         }else if(item.tid.GetName() == "ns3::Icmpv6Echo") 
@@ -817,7 +817,7 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             delete[] headerSerializedBuffer;
 
         ////////////////////////////////////////
-        //  Icmpv4 Time Exceeded Header Serialize
+        //  Icmpv6 Time Exceeded Header Serialize
         ///////////////////////////////////////
 
         }else if(item.tid.GetName() == "ns3::Icmpv6TimeExceeded") 
@@ -864,6 +864,108 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
  
             if(counter == 0) firstNextHeader = 1; 
             NS_LOG_FUNCTION (this << "Icmpv4 Time Exceeded Header serialized" << counter);
+
+            delete[] headerSerializedBuffer;
+                        
+        ////////////////////////////////////////
+        //  ICMPv6 Neighbor Solicitation Serialize
+        ///////////////////////////////////////
+
+        }else if(item.tid.GetName() == "ns3::Icmpv6NS") 
+        { 
+            Callback<ObjectBase *> constr = item.tid.GetConstructor();
+            NS_ASSERT(!constr.IsNull());
+            
+            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+            ObjectBase *instance = constr();
+            NS_ASSERT(instance != 0);
+            
+            Icmpv6NS* header = dynamic_cast<Icmpv6NS*> (instance);
+            NS_ASSERT(header != 0);
+            header->Deserialize(item.current);
+            /*      
+            std::cout << "\n....header HEADER....\n"; 
+            header->Print(std::cout);
+            std::cout << "\n...................\n";
+            */
+            Buffer headerBuffer;
+            headerBuffer.AddAtStart (header->GetSerializedSize());//8
+            header->Serialize(headerBuffer.Begin ());
+
+            // finished, clear the header
+            headerContentSize += header->GetSerializedSize();
+            NS_LOG_FUNCTION(this << "header  size: " << header->GetSerializedSize());
+            delete header; 
+
+            uint8_t *headerSerializedBuffer = new uint8_t[headerBuffer.GetSerializedSize() + 4];
+            uint32_t serializeOutput = headerBuffer.Serialize(headerSerializedBuffer, headerBuffer.GetSerializedSize() + 4);
+            NS_LOG_FUNCTION(this << "Icmpv6NS Header Serialize result: " << serializeOutput << headerBuffer.GetSerializedSize() + 4);
+
+            //SET HEADER SIZE
+            m_icmpv6NSHeaderSize = headerBuffer.GetSerializedSize() + 4;
+            
+            //check if serialized process was sucessful
+            NS_ASSERT(serializeOutput != 0);
+            
+            //Add to headers vector which is going to be encrypted
+            for(uint16_t a=0; a<(headerBuffer.GetSerializedSize() + 4); a++)
+                headerContentVector.push_back(headerSerializedBuffer[a]);
+
+            NS_LOG_FUNCTION ("PLAINTEXT.size after Icmpv6NS: " << headerContentVector.size() );
+ 
+            if(counter == 0) firstNextHeader = 1; 
+            NS_LOG_FUNCTION (this << "Icmpv6NS Header serialized" << counter);
+
+            delete[] headerSerializedBuffer;
+                        
+        ////////////////////////////////////////
+        //  ICMPv6 Option link layer address Header Serialize
+        ///////////////////////////////////////
+
+        }else if(item.tid.GetName() == "ns3::Icmpv6OptionLinkLayerAddress") 
+        { 
+            Callback<ObjectBase *> constr = item.tid.GetConstructor();
+            NS_ASSERT(!constr.IsNull());
+            
+            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+            ObjectBase *instance = constr();
+            NS_ASSERT(instance != 0);
+            
+            Icmpv6OptionLinkLayerAddress* header = dynamic_cast<Icmpv6OptionLinkLayerAddress*> (instance);
+            NS_ASSERT(header != 0);
+            header->Deserialize(item.current);
+            /*      
+            std::cout << "\n....header HEADER....\n"; 
+            header->Print(std::cout);
+            std::cout << "\n...................\n";
+            */
+            Buffer headerBuffer;
+            headerBuffer.AddAtStart (header->GetSerializedSize());//8
+            header->Serialize(headerBuffer.Begin ());
+
+            // finished, clear the header
+            headerContentSize += header->GetSerializedSize();
+            NS_LOG_FUNCTION(this << "header  size: " << header->GetSerializedSize());
+            delete header; 
+
+            uint8_t *headerSerializedBuffer = new uint8_t[headerBuffer.GetSerializedSize() + 4];
+            uint32_t serializeOutput = headerBuffer.Serialize(headerSerializedBuffer, headerBuffer.GetSerializedSize() + 4);
+            NS_LOG_FUNCTION(this << "Icmpv6OptionLinkLayerAddress Header Serialize result: " << serializeOutput << headerBuffer.GetSerializedSize() + 4);
+
+            //SET HEADER SIZE
+            m_icmpv6OptionLinkLayerAddressHeaderSize = headerBuffer.GetSerializedSize() + 4;
+            
+            //check if serialized process was sucessful
+            NS_ASSERT(serializeOutput != 0);
+            
+            //Add to headers vector which is going to be encrypted
+            for(uint16_t a=0; a<(headerBuffer.GetSerializedSize() + 4); a++)
+                headerContentVector.push_back(headerSerializedBuffer[a]);
+
+            NS_LOG_FUNCTION ("PLAINTEXT.size after Icmpv6OptionLinkLayerAddress: " << headerContentVector.size() );
+ 
+            if(counter == 0) firstNextHeader = 1; 
+            NS_LOG_FUNCTION (this << "Icmpv6OptionLinkLayerAddress Header serialized" << counter);
 
             delete[] headerSerializedBuffer;
                         
@@ -980,520 +1082,522 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
 
             delete[] tcpBuffer;
     
-        ////////////////////////////////////////
+        //////////////////////////////////////
         //  AODV Type Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodv::TypeHeader") 
-        {  
+        /////////////////////////////////////
+        }
+        // else if(item.tid.GetName() == "ns3::aodv::TypeHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodv::TypeHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::TypeHeader*> (instance);
-            NS_ASSERT(aodvPositionHeader != 0);
-            aodvPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvHeaderBuffer;
-            aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
-            aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
+        //     ns3::aodv::TypeHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::TypeHeader*> (instance);
+        //     NS_ASSERT(aodvPositionHeader != 0);
+        //     aodvPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvHeaderBuffer;
+        //     aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
+        //     aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodv type Header  size: " << aodvPositionHeader->GetSerializedSize());
-            delete aodvPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodv type Header  size: " << aodvPositionHeader->GetSerializedSize());
+        //     delete aodvPositionHeader; 
 
-            uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODV TypeHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODV TypeHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvTypeHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvTypeHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::TypeHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::TypeHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODV_TYPE_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODV TypeHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODV_TYPE_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODV TypeHeader serialized" << counter);
 
-            delete[] aodvBuffer;
+        //     delete[] aodvBuffer;
 
-        ////////////////////////////////////////
-        //  AODV Rrep Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodv::RrepHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODV Rrep Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodv::RrepHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodv::RrepHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RrepHeader*> (instance);
-            NS_ASSERT(aodvPositionHeader != 0);
-            aodvPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvHeaderBuffer;
-            aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
-            aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
+        //     ns3::aodv::RrepHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RrepHeader*> (instance);
+        //     NS_ASSERT(aodvPositionHeader != 0);
+        //     aodvPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvHeaderBuffer;
+        //     aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
+        //     aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodv RrepHeader  size: " << aodvPositionHeader->GetSerializedSize());
-            delete aodvPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodv RrepHeader  size: " << aodvPositionHeader->GetSerializedSize());
+        //     delete aodvPositionHeader; 
 
-            uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODV RrepHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODV RrepHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvRrepHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvRrepHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RrepHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RrepHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODV_RREP_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODV RrepHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODV_RREP_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODV RrepHeader serialized" << counter);
 
-            delete[] aodvBuffer;
+        //     delete[] aodvBuffer;
             
-        ////////////////////////////////////////
-        //  AODV Rreq Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodv::RreqHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODV Rreq Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodv::RreqHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodv::RreqHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RreqHeader*> (instance);
-            NS_ASSERT(aodvPositionHeader != 0);
-            aodvPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvHeaderBuffer;
-            aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
-            aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
+        //     ns3::aodv::RreqHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RreqHeader*> (instance);
+        //     NS_ASSERT(aodvPositionHeader != 0);
+        //     aodvPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvHeaderBuffer;
+        //     aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
+        //     aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodv RreqHeader  size: " << aodvPositionHeader->GetSerializedSize());
-            delete aodvPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodv RreqHeader  size: " << aodvPositionHeader->GetSerializedSize());
+        //     delete aodvPositionHeader; 
 
-            uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODV RreqHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODV RreqHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvRreqHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvRreqHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RreqHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RreqHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODV_RREQ_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODV RreqHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODV_RREQ_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODV RreqHeader serialized" << counter);
 
-            delete[] aodvBuffer;
+        //     delete[] aodvBuffer;
             
-        ////////////////////////////////////////
-        //  AODV Rrep Ack Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodv::RrepAckHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODV Rrep Ack Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodv::RrepAckHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodv::RrepAckHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RrepAckHeader*> (instance);
-            NS_ASSERT(aodvPositionHeader != 0);
-            aodvPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvHeaderBuffer;
-            aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
-            aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
+        //     ns3::aodv::RrepAckHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RrepAckHeader*> (instance);
+        //     NS_ASSERT(aodvPositionHeader != 0);
+        //     aodvPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvHeaderBuffer;
+        //     aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
+        //     aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodv RrepAckHeader  size: " << aodvPositionHeader->GetSerializedSize());
-            delete aodvPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodv RrepAckHeader  size: " << aodvPositionHeader->GetSerializedSize());
+        //     delete aodvPositionHeader; 
 
-            uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODV RrepAckHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODV RrepAckHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvRrepAckHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvRrepAckHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RrepAckHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RrepAckHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODV_RREP_ACK_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODV RrepAckHeader serialized" << counter); 
+        //     if(counter == 0) firstNextHeader = AODV_RREP_ACK_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODV RrepAckHeader serialized" << counter); 
 
-            delete[] aodvBuffer;
+        //     delete[] aodvBuffer;
             
-        ////////////////////////////////////////
-        //  AODV Rrerr Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodv::RerrHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODV Rrerr Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodv::RerrHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodv::RerrHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RerrHeader*> (instance);
-            NS_ASSERT(aodvPositionHeader != 0);
-            aodvPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvHeaderBuffer;
-            aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
-            aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
+        //     ns3::aodv::RerrHeader* aodvPositionHeader = dynamic_cast<ns3::aodv::RerrHeader*> (instance);
+        //     NS_ASSERT(aodvPositionHeader != 0);
+        //     aodvPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvHeaderBuffer;
+        //     aodvHeaderBuffer.AddAtStart (aodvPositionHeader->GetSerializedSize()); 
+        //     aodvPositionHeader->Serialize(aodvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodv RerrHeader  size: " << aodvPositionHeader->GetSerializedSize());
-            delete aodvPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodv RerrHeader  size: " << aodvPositionHeader->GetSerializedSize());
+        //     delete aodvPositionHeader; 
 
-            uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODV RerrHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvBuffer = new uint8_t[aodvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvHeaderBuffer.Serialize(aodvBuffer, aodvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODV RerrHeader Serialize result: " << serializeOutput << aodvHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvRerrHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvRerrHeaderSize = aodvHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RerrHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodv::RerrHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODV_RERR_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODV RerrHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODV_RERR_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODV RerrHeader serialized" << counter);
 
-            delete[] aodvBuffer;
+        //     delete[] aodvBuffer;
             
-        ////////////////////////////////////////
-        //  AODVQ Type Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodvq::TypeHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODVQ Type Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodvq::TypeHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodvq::TypeHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::TypeHeader*> (instance);
-            NS_ASSERT(aodvqPositionHeader != 0);
-            aodvqPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvqPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvqHeaderBuffer;
-            aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
-            aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
+        //     ns3::aodvq::TypeHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::TypeHeader*> (instance);
+        //     NS_ASSERT(aodvqPositionHeader != 0);
+        //     aodvqPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvqPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvqHeaderBuffer;
+        //     aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
+        //     aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvqPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodvq type Header  size: " << aodvqPositionHeader->GetSerializedSize());
-            delete aodvqPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvqPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodvq type Header  size: " << aodvqPositionHeader->GetSerializedSize());
+        //     delete aodvqPositionHeader; 
 
-            uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODVQ TypeHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODVQ TypeHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvqTypeHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvqTypeHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::TypeHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::TypeHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODVQ_TYPE_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODVQ TypeHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODVQ_TYPE_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODVQ TypeHeader serialized" << counter);
 
-            delete[] aodvqBuffer;
+        //     delete[] aodvqBuffer;
             
-        ////////////////////////////////////////
-        //  AODVQ Rrep Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodvq::RrepHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODVQ Rrep Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodvq::RrepHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodvq::RrepHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RrepHeader*> (instance);
-            NS_ASSERT(aodvqPositionHeader != 0);
-            aodvqPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvqPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvqHeaderBuffer;
-            aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
-            aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
+        //     ns3::aodvq::RrepHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RrepHeader*> (instance);
+        //     NS_ASSERT(aodvqPositionHeader != 0);
+        //     aodvqPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvqPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvqHeaderBuffer;
+        //     aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
+        //     aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvqPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodvq RrepHeader  size: " << aodvqPositionHeader->GetSerializedSize());
-            delete aodvqPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvqPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodvq RrepHeader  size: " << aodvqPositionHeader->GetSerializedSize());
+        //     delete aodvqPositionHeader; 
 
-            uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODVQ RrepHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODVQ RrepHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvqRrepHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvqRrepHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RrepHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RrepHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODVQ_RREP_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODVQ RrepHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODVQ_RREP_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODVQ RrepHeader serialized" << counter);
 
-            delete[] aodvqBuffer;
+        //     delete[] aodvqBuffer;
 
-        ////////////////////////////////////////
-        //  AODVQ Rreq Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodvq::RreqHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODVQ Rreq Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodvq::RreqHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodvq::RreqHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RreqHeader*> (instance);
-            NS_ASSERT(aodvqPositionHeader != 0);
-            aodvqPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvqPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvqHeaderBuffer;
-            aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
-            aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
+        //     ns3::aodvq::RreqHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RreqHeader*> (instance);
+        //     NS_ASSERT(aodvqPositionHeader != 0);
+        //     aodvqPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvqPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvqHeaderBuffer;
+        //     aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
+        //     aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvqPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodvq RreqHeader  size: " << aodvqPositionHeader->GetSerializedSize());
-            delete aodvqPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvqPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodvq RreqHeader  size: " << aodvqPositionHeader->GetSerializedSize());
+        //     delete aodvqPositionHeader; 
 
-            uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODVQ RreqHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODVQ RreqHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvqRreqHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvqRreqHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RreqHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RreqHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODVQ_RREQ_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODVQ RreqHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODVQ_RREQ_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODVQ RreqHeader serialized" << counter);
 
-            delete[] aodvqBuffer;
+        //     delete[] aodvqBuffer;
 
-        ////////////////////////////////////////
-        //  AODVQ Rrep Ack Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodvq::RrepAckHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODVQ Rrep Ack Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodvq::RrepAckHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodvq::RrepAckHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RrepAckHeader*> (instance);
-            NS_ASSERT(aodvqPositionHeader != 0);
-            aodvqPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvqPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvqHeaderBuffer;
-            aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
-            aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
+        //     ns3::aodvq::RrepAckHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RrepAckHeader*> (instance);
+        //     NS_ASSERT(aodvqPositionHeader != 0);
+        //     aodvqPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvqPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvqHeaderBuffer;
+        //     aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
+        //     aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvqPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodvq RrepAckHeader  size: " << aodvqPositionHeader->GetSerializedSize());
-            delete aodvqPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvqPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodvq RrepAckHeader  size: " << aodvqPositionHeader->GetSerializedSize());
+        //     delete aodvqPositionHeader; 
 
-            uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODVQ RrepAckHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODVQ RrepAckHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvqRrepAckHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvqRrepAckHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RrepAckHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RrepAckHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODVQ_RREP_ACK_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODVQ RrepAckHeader serialized" << counter); 
+        //     if(counter == 0) firstNextHeader = AODVQ_RREP_ACK_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODVQ RrepAckHeader serialized" << counter); 
 
-            delete[] aodvqBuffer;
+        //     delete[] aodvqBuffer;
 
-        ////////////////////////////////////////
-        //  AODVQ Rrerr Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::aodvq::RerrHeader") 
-        {  
+        // ////////////////////////////////////////
+        // //  AODVQ Rrerr Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::aodvq::RerrHeader") 
+        // {  
               
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::aodvq::RerrHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RerrHeader*> (instance);
-            NS_ASSERT(aodvqPositionHeader != 0);
-            aodvqPositionHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            aodvqPositionHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer aodvqHeaderBuffer;
-            aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
-            aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
+        //     ns3::aodvq::RerrHeader* aodvqPositionHeader = dynamic_cast<ns3::aodvq::RerrHeader*> (instance);
+        //     NS_ASSERT(aodvqPositionHeader != 0);
+        //     aodvqPositionHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     aodvqPositionHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer aodvqHeaderBuffer;
+        //     aodvqHeaderBuffer.AddAtStart (aodvqPositionHeader->GetSerializedSize()); 
+        //     aodvqPositionHeader->Serialize(aodvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += aodvqPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "aodvq RerrHeader  size: " << aodvqPositionHeader->GetSerializedSize());
-            delete aodvqPositionHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += aodvqPositionHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "aodvq RerrHeader  size: " << aodvqPositionHeader->GetSerializedSize());
+        //     delete aodvqPositionHeader; 
 
-            uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "AODVQ RerrHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *aodvqBuffer = new uint8_t[aodvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = aodvqHeaderBuffer.Serialize(aodvqBuffer, aodvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "AODVQ RerrHeader Serialize result: " << serializeOutput << aodvqHeaderBuffer.GetSerializedSize() + 4);
  
-            //SET HEADER SIZE
-            m_aodvqRerrHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_aodvqRerrHeaderSize = aodvqHeaderBuffer.GetSerializedSize() + 4;
  
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(aodvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(aodvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(aodvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RerrHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after aodvq::RerrHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = AODVQ_RERR_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "AODVQ RerrHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = AODVQ_RERR_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "AODVQ RerrHeader serialized" << counter);
 
-            delete[] aodvqBuffer;
+        //     delete[] aodvqBuffer;
              
         ////////////////////////////////////////
-        //  OLSR PacketHeader Serialize
+        //  OLSR6 PacketHeader Serialize
         ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::olsr::PacketHeader") 
+        // }
+        else if(item.tid.GetName() == "ns3::olsr6::PacketHeader") 
         {  
 
             Callback<ObjectBase *> constr = item.tid.GetConstructor();
@@ -1503,48 +1607,48 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             ObjectBase *instance = constr();
             NS_ASSERT(instance != 0);
             
-            ns3::olsr::PacketHeader* olsrPositionHeader = dynamic_cast<ns3::olsr::PacketHeader*> (instance);
-            NS_ASSERT(olsrPositionHeader != 0);
-            olsrPositionHeader->Deserialize(item.current);
+            ns3::olsr6::PacketHeader* olsr6PositionHeader = dynamic_cast<ns3::olsr6::PacketHeader*> (instance);
+            NS_ASSERT(olsr6PositionHeader != 0);
+            olsr6PositionHeader->Deserialize(item.current);
             /*
             std::cout << "\n\n"; 
-            olsrPositionHeader->Print(std::cout);
+            olsr6PositionHeader->Print(std::cout);
             std::cout << "\n\n";
             */
-            Buffer olsrHeaderBuffer;
-            olsrHeaderBuffer.AddAtStart ( olsrPositionHeader->GetSerializedSize() ); 
-            olsrPositionHeader->Serialize(olsrHeaderBuffer.Begin ());
+            Buffer olsr6HeaderBuffer;
+            olsr6HeaderBuffer.AddAtStart ( olsr6PositionHeader->GetSerializedSize() ); 
+            olsr6PositionHeader->Serialize(olsr6HeaderBuffer.Begin ());
  
             // finished, clear the header
-            headerContentSize += olsrPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "olsr PacketHeader size: " << olsrPositionHeader->GetSerializedSize());
-            delete olsrPositionHeader; 
+            headerContentSize += olsr6PositionHeader->GetSerializedSize();
+            NS_LOG_FUNCTION(this << "olsr6 PacketHeader size: " << olsr6PositionHeader->GetSerializedSize());
+            delete olsr6PositionHeader; 
 
-            uint8_t *olsrBuffer = new uint8_t[olsrHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = olsrHeaderBuffer.Serialize(olsrBuffer, olsrHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "olsr PacketHeader Serialize result: " << serializeOutput << olsrHeaderBuffer.GetSerializedSize() + 4);
+            uint8_t *olsr6Buffer = new uint8_t[olsr6HeaderBuffer.GetSerializedSize() + 4];
+            uint32_t serializeOutput = olsr6HeaderBuffer.Serialize(olsr6Buffer, olsr6HeaderBuffer.GetSerializedSize() + 4);
+            NS_LOG_FUNCTION(this << "olsr6 PacketHeader Serialize result: " << serializeOutput << olsr6HeaderBuffer.GetSerializedSize() + 4);
             
             //SET HEADER SIZE
-            m_olsrPacketHeaderSize = olsrHeaderBuffer.GetSerializedSize() + 4;
+            m_olsr6PacketHeaderSize = olsr6HeaderBuffer.GetSerializedSize() + 4;
 
             //check if serialized process was sucessful
             NS_ASSERT(serializeOutput != 0);
             
             //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(olsrHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(olsrBuffer[a]);
+            for(uint16_t a=0; a<(olsr6HeaderBuffer.GetSerializedSize() + 4); a++)
+                headerContentVector.push_back(olsr6Buffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after olsr::PacketHeader: " << headerContentVector.size() );
+            NS_LOG_FUNCTION ("PLAINTEXT.size after olsr6::PacketHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = OLSR_PACKET_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "olsr PacketHeader serialized" << counter);
+            if(counter == 0) firstNextHeader = OLSR6_PACKET_HEADER_PROTOCOL_NUMBER;
+            NS_LOG_FUNCTION (this << "olsr6 PacketHeader serialized" << counter);
 
-            delete[] olsrBuffer;
+            delete[] olsr6Buffer;
             
         ////////////////////////////////////////
-        //  OLSR MessageHeader Serialize
+        //  OLSR6 MessageHeader Serialize
         ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::olsr::MessageHeader") 
+        }else if(item.tid.GetName() == "ns3::olsr6::MessageHeader") 
         {  
 
             Callback<ObjectBase *> constr = item.tid.GetConstructor();
@@ -1554,27 +1658,27 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             ObjectBase *instance = constr();
             NS_ASSERT(instance != 0);
             
-            ns3::olsr::MessageHeader* olsrPositionHeader = dynamic_cast<ns3::olsr::MessageHeader*> (instance);
-            NS_ASSERT(olsrPositionHeader != 0);
-            olsrPositionHeader->Deserialize(item.current);
+            ns3::olsr6::MessageHeader* olsr6PositionHeader = dynamic_cast<ns3::olsr6::MessageHeader*> (instance);
+            NS_ASSERT(olsr6PositionHeader != 0);
+            olsr6PositionHeader->Deserialize(item.current);
             /*
             std::cout << "\n\n"; 
-            olsrPositionHeader->Print(std::cout);
+            olsr6PositionHeader->Print(std::cout);
             std::cout << "\n\n";
             */
-            Buffer olsrHeaderBuffer;
-            olsrHeaderBuffer.AddAtStart ( olsrPositionHeader->GetSerializedSize() ); 
-            olsrPositionHeader->Serialize(olsrHeaderBuffer.Begin ());
+            Buffer olsr6HeaderBuffer;
+            olsr6HeaderBuffer.AddAtStart ( olsr6PositionHeader->GetSerializedSize() ); 
+            olsr6PositionHeader->Serialize(olsr6HeaderBuffer.Begin ());
  
             // finished, clear the header
-            headerContentSize += olsrPositionHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "olsr MessageHeader size: " << olsrPositionHeader->GetSerializedSize());
-            NS_LOG_FUNCTION(this << "olsr MessageHeader type: " << olsrPositionHeader->GetMessageType());
-            delete olsrPositionHeader; 
+            headerContentSize += olsr6PositionHeader->GetSerializedSize();
+            NS_LOG_FUNCTION(this << "olsr6 MessageHeader size: " << olsr6PositionHeader->GetSerializedSize());
+            NS_LOG_FUNCTION(this << "olsr6 MessageHeader type: " << olsr6PositionHeader->GetMessageType());
+            delete olsr6PositionHeader; 
 
-            uint8_t *olsrBuffer = new uint8_t[olsrHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = olsrHeaderBuffer.Serialize(olsrBuffer, olsrHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "olsr MessageHeader Serialize result: " << serializeOutput << olsrHeaderBuffer.GetSerializedSize() + 4);
+            uint8_t *olsr6Buffer = new uint8_t[olsr6HeaderBuffer.GetSerializedSize() + 4];
+            uint32_t serializeOutput = olsr6HeaderBuffer.Serialize(olsr6Buffer, olsr6HeaderBuffer.GetSerializedSize() + 4);
+            NS_LOG_FUNCTION(this << "olsr6 MessageHeader Serialize result: " << serializeOutput << olsr6HeaderBuffer.GetSerializedSize() + 4);
 
             //check if serialized process was sucessful
             NS_ASSERT(serializeOutput != 0);
@@ -1582,7 +1686,7 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             //Create QKDDelimiterHeader which is used for dynamic header so we know where header starts and where header stops
             //Otherwise we do not know how to detect header for enrypted text
             QKDv6DelimiterHeader qkdv6DHeader;
-            qkdv6DHeader.SetDelimiterSize ( olsrHeaderBuffer.GetSerializedSize() + 4 ); 
+            qkdv6DHeader.SetDelimiterSize ( olsr6HeaderBuffer.GetSerializedSize() + 4 ); 
 
             std::vector<uint8_t> QKDDelimiterHeaderInVector = QKDv6DelimiterHeaderToVector(qkdv6DHeader);
 
@@ -1591,119 +1695,122 @@ QKDv6Crypto::PacketToString (Ptr<Packet> p)
             for(uint16_t a=0; a<QKDDelimiterHeaderInVector.size(); a++)
                 headerContentVector.push_back(QKDDelimiterHeaderInVector[a]);
             
-            //Finaly add OLSR vector
+            //Finaly add OLSR6 vector
             //Add to headers vector which is going to be encrypted
-            NS_LOG_FUNCTION(this << "Adding OLSR MessageHeader of size" << olsrHeaderBuffer.GetSerializedSize() + 4 );
-            for(uint16_t a=0; a<(olsrHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(olsrBuffer[a]);
+            NS_LOG_FUNCTION(this << "Adding OLSR6 MessageHeader of size" << olsr6HeaderBuffer.GetSerializedSize() + 4 );
+            for(uint16_t a=0; a<(olsr6HeaderBuffer.GetSerializedSize() + 4); a++)
+                headerContentVector.push_back(olsr6Buffer[a]);
  
-            NS_LOG_FUNCTION ("PLAINTEXT.size after olsr::MessageHeader: " << headerContentVector.size() );
+            NS_LOG_FUNCTION ("PLAINTEXT.size after olsr6::MessageHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "olsr MessageHeader serialized" << counter);
+            if(counter == 0) firstNextHeader = OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER;
+            NS_LOG_FUNCTION (this << "olsr6 MessageHeader serialized" << counter);
 
-            delete[] olsrBuffer;
+            delete[] olsr6Buffer;
             
         ////////////////////////////////////////
         //  DSDVQ Header Serialize
         ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::dsdvq::DsdvqHeader") 
-        {  
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        }
+        // else if(item.tid.GetName() == "ns3::dsdvq::DsdvqHeader") 
+        // {  
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::dsdvq::DsdvqHeader* DsdvqHeader = dynamic_cast<ns3::dsdvq::DsdvqHeader*> (instance);
-            NS_ASSERT(DsdvqHeader != 0);
-            DsdvqHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            DsdvqHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer dsdvqHeaderBuffer; 
-            dsdvqHeaderBuffer.AddAtStart (DsdvqHeader->GetSerializedSize());//8
-            DsdvqHeader->Serialize(dsdvqHeaderBuffer.Begin ());
+        //     ns3::dsdvq::DsdvqHeader* DsdvqHeader = dynamic_cast<ns3::dsdvq::DsdvqHeader*> (instance);
+        //     NS_ASSERT(DsdvqHeader != 0);
+        //     DsdvqHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     DsdvqHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer dsdvqHeaderBuffer; 
+        //     dsdvqHeaderBuffer.AddAtStart (DsdvqHeader->GetSerializedSize());//8
+        //     DsdvqHeader->Serialize(dsdvqHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += DsdvqHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "dsdvq Header  size: " << DsdvqHeader->GetSerializedSize());
-            delete DsdvqHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += DsdvqHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "dsdvq Header  size: " << DsdvqHeader->GetSerializedSize());
+        //     delete DsdvqHeader; 
 
-            uint8_t *dsdvqBuffer = new uint8_t[dsdvqHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = dsdvqHeaderBuffer.Serialize(dsdvqBuffer, dsdvqHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "DSDVQ HelloHeader Serialize result: " << serializeOutput << dsdvqHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *dsdvqBuffer = new uint8_t[dsdvqHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = dsdvqHeaderBuffer.Serialize(dsdvqBuffer, dsdvqHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "DSDVQ HelloHeader Serialize result: " << serializeOutput << dsdvqHeaderBuffer.GetSerializedSize() + 4);
 
-            //SET HEADER SIZE
-            m_dsdvqHeaderSize = dsdvqHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_dsdvqHeaderSize = dsdvqHeaderBuffer.GetSerializedSize() + 4;
 
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(dsdvqHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(dsdvqBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(dsdvqHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(dsdvqBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after dsdvq::DsdvqHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after dsdvq::DsdvqHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = DSDVQ_PACKET_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "DSDVQ HelloHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = DSDVQ_PACKET_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "DSDVQ HelloHeader serialized" << counter);
         
-            delete[] dsdvqBuffer;
-                    ////////////////////////////////////////
-        //  DSDV Header Serialize
-        ///////////////////////////////////////
-        }else if(item.tid.GetName() == "ns3::dsdv::DsdvHeader") 
-        {  
-            Callback<ObjectBase *> constr = item.tid.GetConstructor();
-            NS_ASSERT(!constr.IsNull());
+        //     delete[] dsdvqBuffer;
+        //             ////////////////////////////////////////
+        // //  DSDV Header Serialize
+        // ///////////////////////////////////////
+        // }else if(item.tid.GetName() == "ns3::dsdv::DsdvHeader") 
+        // {  
+        //     Callback<ObjectBase *> constr = item.tid.GetConstructor();
+        //     NS_ASSERT(!constr.IsNull());
             
-            // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
-            ObjectBase *instance = constr();
-            NS_ASSERT(instance != 0);
+        //     // Ptr<> and DynamicCast<> won't work here as all headers are from ObjectBase, not Object
+        //     ObjectBase *instance = constr();
+        //     NS_ASSERT(instance != 0);
             
-            ns3::dsdv::DsdvHeader* DsdvHeader = dynamic_cast<ns3::dsdv::DsdvHeader*> (instance);
-            NS_ASSERT(DsdvHeader != 0);
-            DsdvHeader->Deserialize(item.current);
-            /*
-            std::cout << "\n\n"; 
-            DsdvHeader->Print(std::cout);
-            std::cout << "\n\n";
-            */
-            Buffer dsdvHeaderBuffer; 
-            dsdvHeaderBuffer.AddAtStart (DsdvHeader->GetSerializedSize());//8
-            DsdvHeader->Serialize(dsdvHeaderBuffer.Begin ());
+        //     ns3::dsdv::DsdvHeader* DsdvHeader = dynamic_cast<ns3::dsdv::DsdvHeader*> (instance);
+        //     NS_ASSERT(DsdvHeader != 0);
+        //     DsdvHeader->Deserialize(item.current);
+        //     /*
+        //     std::cout << "\n\n"; 
+        //     DsdvHeader->Print(std::cout);
+        //     std::cout << "\n\n";
+        //     */
+        //     Buffer dsdvHeaderBuffer; 
+        //     dsdvHeaderBuffer.AddAtStart (DsdvHeader->GetSerializedSize());//8
+        //     DsdvHeader->Serialize(dsdvHeaderBuffer.Begin ());
  
-            // finished, clear the header
-            headerContentSize += DsdvHeader->GetSerializedSize();
-            NS_LOG_FUNCTION(this << "dsdv Header  size: " << DsdvHeader->GetSerializedSize());
-            delete DsdvHeader; 
+        //     // finished, clear the header
+        //     headerContentSize += DsdvHeader->GetSerializedSize();
+        //     NS_LOG_FUNCTION(this << "dsdv Header  size: " << DsdvHeader->GetSerializedSize());
+        //     delete DsdvHeader; 
 
-            uint8_t *dsdvBuffer = new uint8_t[dsdvHeaderBuffer.GetSerializedSize() + 4];
-            uint32_t serializeOutput = dsdvHeaderBuffer.Serialize(dsdvBuffer, dsdvHeaderBuffer.GetSerializedSize() + 4);
-            NS_LOG_FUNCTION(this << "DSDV HelloHeader Serialize result: " << serializeOutput << dsdvHeaderBuffer.GetSerializedSize() + 4);
+        //     uint8_t *dsdvBuffer = new uint8_t[dsdvHeaderBuffer.GetSerializedSize() + 4];
+        //     uint32_t serializeOutput = dsdvHeaderBuffer.Serialize(dsdvBuffer, dsdvHeaderBuffer.GetSerializedSize() + 4);
+        //     NS_LOG_FUNCTION(this << "DSDV HelloHeader Serialize result: " << serializeOutput << dsdvHeaderBuffer.GetSerializedSize() + 4);
 
-            //SET HEADER SIZE
-            m_dsdvHeaderSize = dsdvHeaderBuffer.GetSerializedSize() + 4;
+        //     //SET HEADER SIZE
+        //     m_dsdvHeaderSize = dsdvHeaderBuffer.GetSerializedSize() + 4;
 
-            //check if serialized process was sucessful
-            NS_ASSERT(serializeOutput != 0);
+        //     //check if serialized process was sucessful
+        //     NS_ASSERT(serializeOutput != 0);
             
-            //Add to headers vector which is going to be encrypted
-            for(uint16_t a=0; a<(dsdvHeaderBuffer.GetSerializedSize() + 4); a++)
-                headerContentVector.push_back(dsdvBuffer[a]);
+        //     //Add to headers vector which is going to be encrypted
+        //     for(uint16_t a=0; a<(dsdvHeaderBuffer.GetSerializedSize() + 4); a++)
+        //         headerContentVector.push_back(dsdvBuffer[a]);
 
-            NS_LOG_FUNCTION ("PLAINTEXT.size after dsdv::DsdvHeader: " << headerContentVector.size() );
+        //     NS_LOG_FUNCTION ("PLAINTEXT.size after dsdv::DsdvHeader: " << headerContentVector.size() );
  
-            if(counter == 0) firstNextHeader = DSDV_PACKET_HEADER_PROTOCOL_NUMBER;
-            NS_LOG_FUNCTION (this << "DSDV HelloHeader serialized" << counter);
+        //     if(counter == 0) firstNextHeader = DSDV_PACKET_HEADER_PROTOCOL_NUMBER;
+        //     NS_LOG_FUNCTION (this << "DSDV HelloHeader serialized" << counter);
 
-            delete[] dsdvBuffer;           
+        //     delete[] dsdvBuffer;           
         
-        }else {
+        // }
+        else {
+            std :: cout << item.tid.GetName () << "\n";
             NS_LOG_FUNCTION ( this << item.tid.GetName() << item.tid.GetSize()  << counter );
             //EXIT HERE BECAUSE HEADER WAS NOT PROPERLY DETECTED!
             NS_ASSERT_MSG (1 == 0, "UNKNOWN HEADER RECEIVED!"); 
@@ -2227,13 +2334,13 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
         protocols.push_back(4); //ADD Ipv4 by default 
  
         //////////////////////
-        // OLSR
+        // OLSR6
         /////////////////////
 
-        //OLSR_PACKET_HEADER_PROTOCOL_NUMBER
-        if(qkdv6CommandHeader.GetProtocol() == OLSR_PACKET_HEADER_PROTOCOL_NUMBER){//147
+        //OLSR6_PACKET_HEADER_PROTOCOL_NUMBER
+        if(qkdv6CommandHeader.GetProtocol() == OLSR6_PACKET_HEADER_PROTOCOL_NUMBER){//147
 
-            NS_LOG_FUNCTION (this << "IT IS OLSR_PACKET_HEADER_PROTOCOL_NUMBER"); 
+            NS_LOG_FUNCTION (this << "IT IS OLSR6_PACKET_HEADER_PROTOCOL_NUMBER"); 
             allowIPv4ToPushHeaderInProtocolChain = false;
 
             protocols.push_back(17); //UDP
@@ -2242,13 +2349,13 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
             protocols.push_back(static_cast<uint32_t> (qkdv6CommandHeader.GetProtocol()));
             NS_LOG_FUNCTION(this << "NextHeader" <<  static_cast<uint32_t> (qkdv6CommandHeader.GetProtocol()) );
 
-            protocols.push_back( OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER );
-            NS_LOG_FUNCTION(this << "NextHeader" <<  OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER );
+            protocols.push_back( OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER );
+            NS_LOG_FUNCTION(this << "NextHeader" <<  OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER );
         
-        //OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER
-        }else if(qkdv6CommandHeader.GetProtocol() == OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER){//147
+        //OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER
+        }else if(qkdv6CommandHeader.GetProtocol() == OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER){//147
 
-            NS_LOG_FUNCTION (this << "IT IS OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER"); 
+            NS_LOG_FUNCTION (this << "IT IS OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER"); 
             allowIPv4ToPushHeaderInProtocolChain = false;
 
             protocols.push_back(17); //UDP
@@ -2440,7 +2547,7 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
  
             protocols.push_back(1); //1
             NS_LOG_FUNCTION(this << "NextHeader" << 1); 
-
+            NS_LOG_UNCOND("HELlo\n");
         }  
         //protocols.push_back(qkdv6CommandHeader.GetProtocol());        
     } 
@@ -2462,9 +2569,9 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
     //DSDVQ
     std::vector<ns3::dsdvq::DsdvqHeader> dsdvqHeaders;
 
-    //OLSR
-    ns3::olsr::PacketHeader olsrPacketHeader; 
-    std::vector<ns3::olsr::MessageHeader> olsrMessageHeaders;
+    //OLSR6
+    ns3::olsr6::PacketHeader olsr6PacketHeader; 
+    std::vector<ns3::olsr6::MessageHeader> olsr6MessageHeaders;
  
     //AODV
     ns3::aodv::TypeHeader aodvTypeHeader;
@@ -2748,74 +2855,74 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
             */ 
  
         ///////////////////////////////////////
-        //  OLSR
+        //  OLSR6
         //////////////////////////////////////
 
-        } else if(protocols[i] == OLSR_PACKET_HEADER_PROTOCOL_NUMBER){ 
+        } else if(protocols[i] == OLSR6_PACKET_HEADER_PROTOCOL_NUMBER){ 
     
-            NS_LOG_FUNCTION(this << "OLSR_PACKET_HEADER detected!" << counter);
+            NS_LOG_FUNCTION(this << "OLSR6_PACKET_HEADER detected!" << counter);
  
-            std::string olsrHeaderText = plainText.substr (counter,counter + m_olsrPacketHeaderSize);
-            const uint8_t* olsrBuffer = reinterpret_cast<const uint8_t*>(olsrHeaderText.c_str()); 
+            std::string olsr6HeaderText = plainText.substr (counter,counter + m_olsr6PacketHeaderSize);
+            const uint8_t* olsr6Buffer = reinterpret_cast<const uint8_t*>(olsr6HeaderText.c_str()); 
 
-            Buffer olsrHeaderBuffer;
-            olsrHeaderBuffer.Deserialize(olsrBuffer, m_olsrPacketHeaderSize);
+            Buffer olsr6HeaderBuffer;
+            olsr6HeaderBuffer.Deserialize(olsr6Buffer, m_olsr6PacketHeaderSize);
  
-            olsrPacketHeader.Deserialize(olsrHeaderBuffer.Begin ());   
+            olsr6PacketHeader.Deserialize(olsr6HeaderBuffer.Begin ());   
  
-            counter += m_olsrPacketHeaderSize;
+            counter += m_olsr6PacketHeaderSize;
 
-            NS_LOG_FUNCTION(this << "OLSR_PACKET_HEADER decrypted");
+            NS_LOG_FUNCTION(this << "OLSR6_PACKET_HEADER decrypted");
   
             /*
             std::cout << "\n";
-            olsrPacketHeader.Print(std::cout);                
+            olsr6PacketHeader.Print(std::cout);                
             std::cout << "\n";
             */
-            //delete[] olsrBuffer;
+            //delete[] olsr6Buffer;
 
-        } else if(protocols[i] == OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER){ 
+        } else if(protocols[i] == OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER){ 
     
-            NS_LOG_FUNCTION(this << "OLSR_MESSAGE_HEADER detected!" << counter <<  plainText.size() << plainText.size() - counter);
+            NS_LOG_FUNCTION(this << "OLSR6_MESSAGE_HEADER detected!" << counter <<  plainText.size() << plainText.size() - counter);
 
             //FIRST WE NEED TO FIGURE OUT THE LENGTH OF THIS HEADER
-            //Therefore, we crop the QKDDelimiterHeader and read the length of OLSR Message Header
+            //Therefore, we crop the QKDDelimiterHeader and read the length of OLSR6 Message Header
 
             std::string temp = plainText.substr(counter, m_qkdv6DHeaderSize); 
             QKDv6DelimiterHeader qkdv6DHeader = StringToQKDv6DelimiterHeader (temp);
             counter += m_qkdv6DHeaderSize;
 
-            NS_LOG_FUNCTION (this << "OLSR_MESSAGE_HEADER size should be " << qkdv6DHeader.GetDelimiterSize());
+            NS_LOG_FUNCTION (this << "OLSR6_MESSAGE_HEADER size should be " << qkdv6DHeader.GetDelimiterSize());
  
-            std::string olsrHeaderText = plainText.substr(counter, qkdv6DHeader.GetDelimiterSize());  
-            uint32_t olsrheaderSize = olsrHeaderText.size();
+            std::string olsr6HeaderText = plainText.substr(counter, qkdv6DHeader.GetDelimiterSize());  
+            uint32_t olsr6headerSize = olsr6HeaderText.size();
 
-            NS_LOG_FUNCTION (this << "Cropped temp is : " << olsrHeaderText); 
-            NS_LOG_FUNCTION(this << "OLSR_MESSAGE_HEADER size:" << olsrheaderSize << temp.size() ); 
+            NS_LOG_FUNCTION (this << "Cropped temp is : " << olsr6HeaderText); 
+            NS_LOG_FUNCTION(this << "OLSR6_MESSAGE_HEADER size:" << olsr6headerSize << temp.size() ); 
 
-            const uint8_t* olsrBuffer = reinterpret_cast<const uint8_t*>(olsrHeaderText.c_str()); 
+            const uint8_t* olsr6Buffer = reinterpret_cast<const uint8_t*>(olsr6HeaderText.c_str()); 
 
-            Buffer olsrHeaderBuffer;
-            olsrHeaderBuffer.Deserialize(olsrBuffer, olsrheaderSize);
+            Buffer olsr6HeaderBuffer;
+            olsr6HeaderBuffer.Deserialize(olsr6Buffer, olsr6headerSize);
   
-            ns3::olsr::MessageHeader olsrMessageHeader; 
-            olsrMessageHeader.Deserialize(olsrHeaderBuffer.Begin ()); 
+            ns3::olsr6::MessageHeader olsr6MessageHeader; 
+            olsr6MessageHeader.Deserialize(olsr6HeaderBuffer.Begin ()); 
  
-            olsrMessageHeaders.push_back(olsrMessageHeader);
-            counter += olsrheaderSize;
+            olsr6MessageHeaders.push_back(olsr6MessageHeader);
+            counter += olsr6headerSize;
  
-            NS_LOG_FUNCTION(this << "OLSR_MESSAGE_HEADER decrypted" << counter << olsrheaderSize);
-            NS_LOG_FUNCTION(this << "OLSR_MESSAGE_HEADER type" << olsrMessageHeader.GetMessageType() );
+            NS_LOG_FUNCTION(this << "OLSR6_MESSAGE_HEADER decrypted" << counter << olsr6headerSize);
+            NS_LOG_FUNCTION(this << "OLSR6_MESSAGE_HEADER type" << olsr6MessageHeader.GetMessageType() );
 
             if(plainText.size() - counter > 0)
-                protocols.push_back(OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER);
+                protocols.push_back(OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER);
             
             /*
             std::cout << "\n";
-            olsrMessageHeader.Print(std::cout);                
+            olsr6MessageHeader.Print(std::cout);                
             std::cout << "\n";
             */
-            //delete[] olsrBuffer;
+            //delete[] olsr6Buffer;
         
         ///////////////////////////////////////
         //  AODV
@@ -3068,7 +3175,7 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
     while(i > 0){   
 
         NS_LOG_FUNCTION(this << "ADDING PROTOCOL:" << protocols[i-1] <<  "TO THE PACKET!");
-
+        std :: cout << "Hello, protocol number is ->" << protocols[i-1] << "\n";
         switch (protocols[i-1]){
 
             /////////////////////////////////
@@ -3125,16 +3232,16 @@ QKDv6Crypto::Decrypt (Ptr<Packet> p, Ptr<QKDv6Buffer> QKDv6buffer)
   
  
             /////////////////////////////////
-            //  OLSR
+            //  OLSR6
             ///////////////////////////////// 
-            case OLSR_PACKET_HEADER_PROTOCOL_NUMBER:
-                packet->AddHeader (olsrPacketHeader);
-                NS_LOG_FUNCTION(this << "olsr Packet Header added to packet!");
+            case OLSR6_PACKET_HEADER_PROTOCOL_NUMBER:
+                packet->AddHeader (olsr6PacketHeader);
+                NS_LOG_FUNCTION(this << "olsr6 Packet Header added to packet!");
             break; 
-            case OLSR_MESSAGE_HEADER_PROTOCOL_NUMBER:  
-                packet->AddHeader ( olsrMessageHeaders.back() );
-                olsrMessageHeaders.pop_back(); 
-                NS_LOG_FUNCTION(this << "olsr Message Header added to packet!");
+            case OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER:  
+                packet->AddHeader ( olsr6MessageHeaders.back() );
+                olsr6MessageHeaders.pop_back(); 
+                NS_LOG_FUNCTION(this << "olsr6 Message Header added to packet!");
             break;
   
             /////////////////////////////////

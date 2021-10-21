@@ -29,6 +29,8 @@
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
 #include "ns3/qkd-manager.h"
+#include "ns3/qkd-v6-manager.h"
+
 
 namespace ns3 {
 

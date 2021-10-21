@@ -30,6 +30,7 @@
 #include "ns3/trace-source-accessor.h"
 #include "ns3/virtual-tcp-socket-factory.h"
 #include "ns3/qkd-manager.h"
+#include "ns3/qkd-v6-manager.h"
 #include "qkd-charging-application.h"
 #include <iostream>
 #include <fstream> 
@@ -1103,9 +1104,12 @@ void QKDChargingApplication::PrepareOutput (std::string key, uint32_t value)
 
     Ptr<Packet> packet = Create<Packet> ((uint8_t*) msg.str().c_str(), msg.str().length());
 
-    if(key== "ADDKEY:"){
+    if(key== "ADDKEY:")
+    {
       if( GetNode()->GetObject<QKDManager> () != 0 )
         packet = GetNode()->GetObject<QKDManager> ()->MarkEncrypt (packet);
+      else if(GetNode()->GetObject<QKDv6Manager> () != 0)
+        packet = GetNode()->GetObject<QKDv6Manager> ()->MarkEncrypt (packet); 
     }
 
     NS_LOG_DEBUG(this << "\t PACKET SIZE:" << packet->GetSize());
@@ -1662,8 +1666,8 @@ void QKDChargingApplication::ProcessIncomingPacket(Ptr<Packet> packet, Ptr<Socke
         m_sendKeyRateMessage = false;
 
         //add key to buffer
-        if(GetNode ()->GetObject<QKDManager> () != 0){
-
+        if(GetNode ()->GetObject<QKDManager> () != 0)
+        {
             /*
             std::cout << Simulator::Now ().GetSeconds () 
             << "\t" << m_sendDevice->GetAddress() 
@@ -1676,7 +1680,11 @@ void QKDChargingApplication::ProcessIncomingPacket(Ptr<Packet> packet, Ptr<Socke
             GetNode ()->GetObject<QKDManager> ()->AddNewKeyMaterial(m_sendDevice->GetAddress(), packetValue);
             //m_maxPackets = m_random->GetValue (m_maxPackets * 0.8, m_maxPackets * 1.2);
         }
-
+        else if(GetNode ()->GetObject<QKDv6Manager> () != 0)
+        {
+            NS_LOG_DEBUG(this << "\t" << m_sendDevice->GetAddress() << "\t" << m_sinkDevice->GetAddress() );
+            GetNode ()->GetObject<QKDv6Manager> ()->AddNewKeyMaterial(m_sendDevice->GetAddress(), packetValue);
+        }
         //prepare response            
         if(m_master == false){ 
             SendMthresholdPacket();

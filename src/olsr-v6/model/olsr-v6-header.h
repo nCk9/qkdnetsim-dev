@@ -39,6 +39,9 @@
 namespace ns3 {
 namespace olsr6 {
 
+#define OLSR6_PACKET_HEADER_PROTOCOL_NUMBER 27
+#define OLSR6_MESSAGE_HEADER_PROTOCOL_NUMBER 28
+
 double EmfToSeconds (uint8_t emf);
 uint8_t SecondsToEmf (double seconds);
 
