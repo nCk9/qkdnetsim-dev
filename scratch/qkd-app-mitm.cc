@@ -85,6 +85,67 @@ Ratio(uint32_t m_bytes_sent, uint32_t m_packets_sent ){
     << "\tRatio (packets):\t" << (float)m_packets_received/(float)m_packets_sent << "\n";
 }
 
+void bb84_eavesdropping(int N, std::vector<std::pair<int, char>>& alice, std::vector<std::pair<int, char>>& bob)
+{
+    std :: string str = "RD";
+    //for eavesdropper
+    std :: vector<std :: pair<int, char>> eve(N);
+    for(int i=0; i<N; i++)
+    {
+        int filter = rand()%2;
+        if(str[filter] == 'R')
+        {
+            if(alice[i].first == 1)  //0 deg
+                eve[i].first = 1;
+            else if(alice[i].first == 2)  //90 deg
+                eve[i].first = 2;
+            else
+                eve[i].first = rand()%2 + 1;
+        }
+        else
+        {
+            if(alice[i].first == 3)  //45 deg
+                eve[i].first = 3;
+            else if(alice[i].first == 4) //135 deg
+                eve[i].first = 4;
+            else
+                eve[i].first = rand()%2 + 3; //to generate values 3 and 4 randomly
+        }
+        eve[i].second = str[filter];
+    }
+    //for bob filter is already decided, now we only need to find final polarizations after the stream comes from eve
+    std :: vector<std :: pair<int, char>> bob_e = bob;
+    for(int i=0; i<N; i++)
+    {
+        if(bob[i].second == 'R')
+        {
+            if(eve[i].first == 1)  //0 deg
+                bob_e[i].first = 1;
+            else if(eve[i].first == 2)  //90 deg
+                bob_e[i].first = 2;
+            else
+                bob_e[i].first = rand()%2 + 1;
+        }
+        else
+        {
+            if(eve[i].first == 3)  //45 deg
+                bob_e[i].first = 3;
+            else if(eve[i].first == 4) //135 deg
+                bob_e[i].first = 4;
+            else
+                bob_e[i].first = rand()%2 + 3; //to generate values 3 and 4 randomly
+        }
+        // bob[i].second = str[filter];
+    }
+    int detected=0; //
+    for(int i=0; i<N; i++)
+        if((alice[i].second == bob[i].second && alice[i].first == bob[i].first) && 
+            bob_e[i].second == alice[i].second && bob_e[i].first != alice[i].first)
+            detected++;
+        
+    std :: cout << "Number of bits discovered during eavesdropping is: " << detected << "\n";
+
+}
  
 int main (int argc, char *argv[])
 {
@@ -100,23 +161,11 @@ int main (int argc, char *argv[])
     // n1.Create(1);
 
     NodeContainer n0n1 = NodeContainer (n.Get(0), n.Get (1));
-    // NodeContainer node2 = NodeContainer (n1.Get(0));
-    //Enable OLSR
-    //AodvHelper routingProtocol;
-    OlsrHelper routingProtocol;
-    // DsdvHelper routingProtocol; 
+    OlsrHelper routingProtocol; 
       
     InternetStackHelper internet;
-    // internet.Install()
     internet.SetRoutingHelper (routingProtocol);
     internet.Install (n);
-    // internet.Install(n1);
-    // InternetStackHelper internet2;
-    // // internet.Install()
-    // internet2.SetRoutingHelper (routingProtocol);
-    // // internet.Install (n);
-    // internet2.Install(n1);
-    // Set Mobility for all nodes
     MobilityHelper mobility;
     Ptr<ListPositionAllocator> positionAlloc = CreateObject <ListPositionAllocator>();
     positionAlloc ->Add(Vector(0, 200, 0)); // node0 
@@ -124,19 +173,12 @@ int main (int argc, char *argv[])
     mobility.SetPositionAllocator(positionAlloc);
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
     mobility.Install(n);
-
-    // MobilityHelper mobility2; //locating node 2, Eve the attacker
-    // Ptr<ListPositionAllocator> positionAlloc2 = CreateObject <ListPositionAllocator>();
-    // positionAlloc2 ->Add(Vector(400, 200, 0)); // node2 
-    // mobility2.SetPositionAllocator(positionAlloc2);
-    // mobility2.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-    // mobility2.Install(n1);   
-    // We create the channels first without any IP addressing information
     NS_LOG_INFO ("Create channels.");
     PointToPointHelper p2p;
     p2p.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
     p2p.SetChannelAttribute ("Delay", StringValue ("2ms")); 
 
+    // NodeContainer       ioTSensor(1000);
     NetDeviceContainer d0d1 = p2p.Install (n0n1); 
     //
     // We've got the "hardware" in place.  Now we need to add IP addresses.
@@ -146,14 +188,6 @@ int main (int argc, char *argv[])
 
     ipv4.SetBase ("10.1.1.0", "255.255.255.0");
     Ipv4InterfaceContainer i0i1 = ipv4.Assign (d0d1);
-    // Ipv4AddressHelper ipv4Eve;
-    // ipv4Eve.SetBase ("10.1.2.0", "255.255.255.0");
-    // Ipv4Address address = ipv4Eve.NewAddress();
-    // std :: cout << "Attacker's address : " << address << "\n";
-    //
-    // Explicitly create the channels required by the topology (shown above).
-    //
-    //  install QKD Managers on the nodes 
     QKDHelper QHelper;  
     QHelper.InstallQKDManager (n); 
  
@@ -178,54 +212,87 @@ int main (int argc, char *argv[])
     std::cout << "Source IP address: " << i0i1.GetAddress(0) << std::endl;
     std::cout << "Destination IP address: " << i0i1.GetAddress(1) << std::endl;
     //polarization assignment
-    int N = 10000; //number of qbits (photons)
-    std :: vector<int> alice (N, 0);
-    std :: vector<int> bob (N, 0);
+    int N = 1000; //number of qbits (photons)
+    // std :: vector<int> alice (N, 0);
+    std :: string str = "RD";
+    std::vector<std::pair<int, char>> alice(N);
+    std :: vector<std :: pair<int, char>> bob (N);
     srand(time(NULL));
     // std :: cout << "Alice's polarzations: ";
     for(int i=0; i<N; i++)
     {
         long int num = rand()%4 + 1;
-        alice[i] = num;
+        alice[i].first = num;
+        int filter = rand()%2;
+        alice[i].second = str[filter];
         // std :: cout << alice[i] << " ";
     }
     // std :: cout << "\nBob's polarization: ";
+    // for(int i=0; i<N; i++)
+    // {
+    //     long int num = rand()%4 + 1;
+    //     bob[i] = num;
+    //     // std :: cout << bob[i] << " ";
+    // }
     for(int i=0; i<N; i++)
     {
-        long int num = rand()%4 + 1;
-        bob[i] = num;
-        // std :: cout << bob[i] << " ";
+        int filter = rand()%2;
+        if(str[filter] == 'R')
+        {
+            if(alice[i].first == 1)  //0 deg
+                bob[i].first = 1;
+            else if(alice[i].first == 2)  //90 deg
+                bob[i].first = 2;
+            else
+                bob[i].first = rand()%2 + 1;
+        }
+        else
+        {
+            if(alice[i].first == 3)  //45 deg
+                bob[i].first = 3;
+            else if(alice[i].first == 4) //135 deg
+                bob[i].first = 4;
+            else
+                bob[i].first = rand()%2 + 3; //to generate values 3 and 4 randomly
+        }
+        bob[i].second = str[filter];
     }
     int ct=0, ct_1=0, ct_2=0, ct_3=0, ct_4=0;
-    std :: vector<int> key(N, 0);
+    std :: vector<int> key;
     for(int i=0; i<N; i++)
-    {
-        if(alice[i] == bob[i])
-            key[i] = alice[i],
+        if(alice[i].second == bob[i].second && alice[i].first == bob[i].first)
+        {
+            key.push_back(alice[i].first),
             ct++;
-        if(key[i] == 1)
-            ct_1++;
-        else if(key[i] == 2)
-            ct_2++;
-        else if(key[i] == 3)
-            ct_3++;
-        else if(key[i] == 4)
-            ct_4++;
-    }
+            if(key.back() == 1)
+                ct_1++;
+            else if(key.back() == 2)
+                ct_2++;
+            else if(key.back() == 3)
+                ct_3++;
+            else if(key.back() == 4)
+                ct_4++;
+        }
         
     std :: cout << "QKD key length: " << ct << "\n";
     std :: cout << "ct_1: " << ct_1 << " ct_2: " << ct_2 << " ct_3: " << ct_3 << " ct_4: " << ct_4 << "\n";
-
+    bb84_eavesdropping(N, alice, bob);
+    // int detected_key=0;
     // //man in the middle attack
     // std :: vector<int> attacker (N, 0);
     // int p=1;
-    // for(int i=0; i<ct; i++)
+    // for(int i=0; i<N; i++)
     // {
     //     attacker[i] = p;
     //     p++;
     //     if(p == 4)
     //         p %= 4;
+
+    //     if((attacker[i] == alice[i] && attacker[i] == bob[i]))
+    //         detected_key++;
     // }
+    // std :: cout << "The key length known by the attacker is: " << ct-detected_key << "\n";
+    // // std :: cout << "Detected key length is: " << detected_key << "\n";
 
     /* QKD APPs for charging  */
     QKDAppChargingHelper qkdChargingApp("ns3::TcpSocketFactory", i0i1.GetAddress(0),  i0i1.GetAddress(1), 3072000);
@@ -266,7 +333,7 @@ int main (int argc, char *argv[])
     Simulator::Stop (Seconds (50));
     Simulator::Run ();
 
-    Ratio(app->sendDataStats(), app->sendPacketStats());
+    // Ratio(app->sendDataStats(), app->sendPacketStats());
  
     //Finally print the graphs
     QHelper.PrintGraphs();
